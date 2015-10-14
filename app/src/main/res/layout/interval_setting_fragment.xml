@@ -1,34 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_background">
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="10dp"
         android:textSize="24sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:id="@+id/settings_description"
         android:textColor="@color/interval_descriptor_color"
         android:text="@string/record_every"/>
 
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:orientation="vertical"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_weight="5">
+        android:layout_centerInParent="true"
+        android:padding="10dp"
+        android:gravity="center_horizontal"
+        android:id="@+id/seekLayout"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/settings_description"
+        >
 
+        <checkpoint.andela.com.productivitytracker.SeekArc
+            xmlns:seekarc="http://schemas.android.com/apk/res/checkpoint.andela.com.productivitytracker"
+            android:layout_width="wrap_content"
+            android:padding="50dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circular_view"
+            seekarc:arcColor="@android:color/holo_blue_dark"
+            seekarc:clockwise="true"
+            seekarc:max="60"
+            seekarc:progressColor="@android:color/white"
+            seekarc:progress="50"
+            seekarc:rotation="290"
+            seekarc:sweepAngle="320"
+            seekarc:startAngle="270"
+            seekarc:thumb="@drawable/custom_seek_arc_control_selector"
+            seekarc:touchInside="true" />
 
-        <ImageButton
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:scaleType="fitCenter"
-            android:id="@+id/playButton" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -36,13 +51,15 @@
             android:gravity="center"
             android:background="@drawable/circular_bounds"
             android:layout_gravity="center"
-            android:padding="20dp">
+            android:padding="40dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:textColor="@android:color/white"
                 android:layout_height="wrap_content"
                 android:id="@+id/default_value"
-                android:textSize="30sp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:textSize="40sp"
                 android:text="@string/default_time"
                 android:layout_centerHorizontal="true" />
             <TextView
@@ -52,7 +69,8 @@
                 android:textColor="@android:color/white"
                 android:id="@+id/minutes"
                 android:text="@string/minutes"
+                android:textSize="15sp"
                 android:layout_centerHorizontal="true" />
         </RelativeLayout>
     </FrameLayout>
-</LinearLayout>
+</RelativeLayout>
