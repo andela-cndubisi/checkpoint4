@@ -5,7 +5,8 @@
         </shape>
     </item>
     <item android:state_pressed="true">
-        <shape android:shape="oval">
+        <shape android:shape="oval" >
+            <size android:height="40dp" android:width="40dp"/>
             <solid android:color="#299dff"/>
         </shape>
     </item>
