@@ -20,7 +20,7 @@ public class MainActivityTest {
 
     @Test
     public void testStartFragmentNotNull(){
-        StartFragment start = (StartFragment)mActivity.getFragmentManager().findFragmentById(R.id.startFragment);
+        StartFragment start = mActivity.getStartFragment();
         assertThat(start).isNotNull();
     }
 }
