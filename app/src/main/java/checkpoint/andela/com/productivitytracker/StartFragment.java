@@ -9,6 +9,7 @@ import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 /**
@@ -16,13 +17,17 @@ import android.widget.ImageButton;
  */
 public class StartFragment  extends Fragment{
     private ImageButton startButton;
+    private Button interval;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.start_fragment, container);
+        View v = inflater.inflate(R.layout.start_fragment, container, false);
         startButton = (ImageButton)v.findViewById(R.id.playButton);
+        interval = (Button)v.findViewById(R.id.interval);
+
         startButton.setOnClickListener(onClickListener);
+        interval.setOnClickListener(onClickListener);
         return v;
     }
 
@@ -33,9 +38,15 @@ public class StartFragment  extends Fragment{
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            FragmentManager fm = getActivity().getFragmentManager();
-            IntervalSettingsFragment intervalSettingsFragment = new IntervalSettingsFragment();
-            fm.beginTransaction().add(R.id.mainActivity, intervalSettingsFragment).commit();
+            if (v.getId() == R.id.playButton) {
+
+            }else if (v.getId() == R.id.interval){
+                FragmentManager fm = getActivity().getFragmentManager();
+                IntervalSettingsFragment intervalSettingsFragment = new IntervalSettingsFragment();
+                fm.beginTransaction().add(R.id.container, intervalSettingsFragment)
+                        .addToBackStack("home")
+                        .commit();
+            }
         }
     };
 }
