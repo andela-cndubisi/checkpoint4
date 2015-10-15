@@ -23,7 +23,7 @@ public class StartFragment  extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.start_fragment, container, false);
-        startButton = (ImageButton)v.findViewById(R.id.playButton);
+        startButton = (ImageButton)v.findViewById(R.id.start_button);
         interval = (Button)v.findViewById(R.id.interval);
 
         startButton.setOnClickListener(onClickListener);
@@ -38,15 +38,25 @@ public class StartFragment  extends Fragment{
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (v.getId() == R.id.playButton) {
-
+            if (v.getId() == R.id.start_button) {
+                start();
             }else if (v.getId() == R.id.interval){
-                FragmentManager fm = getActivity().getFragmentManager();
-                IntervalSettingsFragment intervalSettingsFragment = new IntervalSettingsFragment();
-                fm.beginTransaction().add(R.id.container, intervalSettingsFragment)
-                        .addToBackStack("home")
-                        .commit();
+                setInterval();
             }
         }
+
     };
+
+    private void setInterval(){
+        FragmentManager fm = getActivity().getFragmentManager();
+        IntervalSettingsFragment intervalSettingsFragment = new IntervalSettingsFragment();
+        fm.beginTransaction().add(R.id.container, intervalSettingsFragment)
+                .addToBackStack("home")
+                .commit();
+    }
+    private void start() {
+        FragmentManager fm = getActivity().getFragmentManager();
+        TrackingFragment  tracking = new TrackingFragment();
+        fm.beginTransaction().add(R.id.container, tracking).commit();
+    }
 }
