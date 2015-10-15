@@ -3,13 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:id="@+id/mainActivity"
     android:layout_height="match_parent" tools:context=".MainActivity">
-
-    <fragment
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="checkpoint.andela.com.productivitytracker.StartFragment"
-        android:id="@+id/startFragment"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        tools:layout="@layout/start_fragment" />
+        android:orientation="vertical"
+        android:id="@+id/container"
+        android:layout_below="@+id/toolbar">
+
+    </FrameLayout>
+
+
 </RelativeLayout>

@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="10dp"
         android:textSize="24sp"
         android:textColor="@color/interval_descriptor_color"
@@ -17,13 +17,13 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
         android:textSize="25sp"
         android:layout_weight="0.2"
         android:layout_gravity="center"
         android:background="@color/interval_button_color"
-        android:text="15 Minutes"
+        android:text="@string/interval"
         android:id="@+id/interval"/>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -33,8 +33,8 @@
         android:gravity="center"
         android:layout_weight="5">
         <ImageButton
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
             android:src="@drawable/play"
             android:layout_gravity="center"
             android:background="@drawable/circular_bounds"
