@@ -23,7 +23,12 @@ public class StartFragmentTest {
     @Before
     public void setUp() throws Exception {
         mActivity = Robolectric.buildActivity(MainActivity.class).create().start().get();
-        startFragment = (StartFragment)mActivity.getFragmentManager().findFragmentById(R.id.startFragment);
+    }
+
+    @Test
+    public void testStartFragmentNotNull() throws Exception {
+        startFragment = mActivity.getStartFragment();
+        assertThat(startFragment).isNotNull();
     }
 
     @Test
