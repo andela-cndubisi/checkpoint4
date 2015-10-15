@@ -9,7 +9,8 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 import static org.assertj.core.api.Assertions.*;
-import org.robolectric.shadows.ShadowFilter;
+
+import checkpoint.andela.com.productivitytracker.fragments.StartFragment;
 
 /**
  * Created by andela-cj on 14/10/2015.

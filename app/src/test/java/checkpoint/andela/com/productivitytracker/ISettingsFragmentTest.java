@@ -1,7 +1,6 @@
 package checkpoint.andela.com.productivitytracker;
 
 import android.app.FragmentTransaction;
-import android.widget.RelativeLayout;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +8,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.util.FragmentTestUtil;
+
+import checkpoint.andela.com.productivitytracker.fragments.IntervalSettingsFragment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
