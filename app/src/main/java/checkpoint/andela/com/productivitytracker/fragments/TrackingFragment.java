@@ -1,4 +1,4 @@
-package checkpoint.andela.com.productivitytracker;
+package checkpoint.andela.com.productivitytracker.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import checkpoint.andela.com.productivitytracker.R;
 
-public class Tracking extends Fragment {
+
+public class TrackingFragment extends Fragment {
     private TextView durationSpent;
     private ImageButton pause;
     private TextView numberofLocations;

@@ -1,16 +1,16 @@
-package checkpoint.andela.com.productivitytracker;
+package checkpoint.andela.com.productivitytracker.fragments;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+
+import checkpoint.andela.com.productivitytracker.R;
 
 /**
  * Created by andela-cj on 14/10/2015.
