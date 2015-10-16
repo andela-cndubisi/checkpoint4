@@ -24,16 +24,16 @@ public class StartFragmentTest {
     @Before
     public void setUp() throws Exception {
         mActivity = Robolectric.buildActivity(MainActivity.class).create().start().get();
+        startFragment = mActivity.getStartFragment();
     }
 
     @Test
     public void testStartFragmentNotNull() throws Exception {
-        startFragment = mActivity.getStartFragment();
         assertThat(startFragment).isNotNull();
     }
 
     @Test
-    public void testImmageButtonIsNotNull() throws Exception {
+    public void testImageButtonIsNotNull() throws Exception {
         ImageButton startButton = startFragment.getStartButton();
         assertThat(startButton).isNotNull();
     }
