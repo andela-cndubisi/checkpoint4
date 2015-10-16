@@ -27,7 +27,7 @@ public class TrackingFragmentTest {
         mActivity = Robolectric.buildActivity(MainActivity.class).create().start().get();
         ImageButton start = (ImageButton) mActivity.findViewById(R.id.start_button);
         start.performClick();
-        trackingFragment =(TrackingFragment) mActivity.getFragmentManager().findFragmentById(R.id.progress_circle);
+        trackingFragment =(TrackingFragment) mActivity.getFragmentManager().findFragmentById(R.id.container);
     }
 
     @Test
@@ -37,9 +37,7 @@ public class TrackingFragmentTest {
 
     @Test
     public void testFragmentIsInLayout() {
-        assertThat(trackingFragment.isAdded()).isTrue();
-        assertThat(mActivity.findViewById(R.id.pause_play_layout)).isNotNull();
-    }
+        assertThat(trackingFragment.isAdded()).isTrue();}
 
     @Test
     public void testButtonAreNotNull(){
