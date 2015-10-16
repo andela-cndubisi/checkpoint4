@@ -6,7 +6,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.Transformation;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import checkpoint.andela.com.productivitytracker.R;
@@ -47,6 +51,14 @@ public class TrackingFragment extends Fragment {
         public void onClick(View v) {
             getActivity().findViewById(R.id.progress_circle).setVisibility(View.INVISIBLE);
             getActivity().findViewById(R.id.pause_play_layout).setVisibility(View.VISIBLE);
+
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)playButton.getLayoutParams();
+            params.addRule(11,-1);
+            playButton.setLayoutParams(params);
+
+            RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams)stopButton.getLayoutParams();
+            params2.addRule(9,-1);
+            stopButton.setLayoutParams(params2);
             if (v.getId() == R.id.stop_button){
 
             }else if(v.getId() == R.id.play_button){
@@ -62,4 +74,7 @@ public class TrackingFragment extends Fragment {
             return true;
         }
     };
+
+    final int newLeftMargin = 20;
+
 }
