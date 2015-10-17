@@ -5,35 +5,26 @@
     android:layout_height="match_parent"
     android:id="@+id/intervalLayout"
     android:background="@color/blue_background">
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="50dp"
-        android:id="@+id/settings_description"
-        android:textColor="@color/interval_descriptor_color"
-        android:text="@string/record_every"/>
-
+    <include
+        android:id="@+id/toolbar_dialog"
+        layout="@layout/dialog_toolbar"/>
     <FrameLayout
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="10dp"
         android:layout_centerInParent="true"
         android:padding="10dp"
         android:gravity="center_horizontal"
         android:id="@+id/seekLayout"
-        android:layout_marginTop="50dp"
-        android:layout_below="@+id/settings_description"
+        android:layout_below="@+id/toolbar_dialog"
         >
-
         <checkpoint.andela.com.productivitytracker.SeekArc
             xmlns:seekarc="http://schemas.android.com/apk/res/checkpoint.andela.com.productivitytracker"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:padding="40dp"
             android:id="@+id/seekArc"
-            android:layout_height="wrap_content"
             android:background="@drawable/circular_view"
             seekarc:arcColor="@android:color/holo_blue_dark"
             seekarc:clockwise="true"
@@ -77,4 +68,5 @@
                 android:layout_centerHorizontal="true" />
         </RelativeLayout>
     </FrameLayout>
+
 </RelativeLayout>
