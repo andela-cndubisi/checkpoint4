@@ -6,23 +6,23 @@
     android:layout_width="match_parent"
     android:id="@+id/pause_play_layout"
     android:gravity="center"
-    android:visibility="gone"
     >
-    <ImageButton
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/stop"
         android:padding="15dp"
+        android:drawableLeft="@drawable/stop"
         android:id="@+id/stop_button"
+        android:text=""
         android:layout_marginLeft="20dp"
         android:background="@drawable/circular_view"/>
 
-    <ImageButton
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/circular_view"
         android:padding="15dp"
+        android:drawableLeft="@drawable/play"
         android:layout_marginRight="20dp"
-        android:id="@+id/play_button"
-        android:src="@drawable/play"/>
+        android:id="@+id/play_button"/>
 </RelativeLayout>
