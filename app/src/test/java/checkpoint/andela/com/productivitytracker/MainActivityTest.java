@@ -8,6 +8,7 @@ import org.robolectric.RobolectricGradleTestRunner;
 import static org.assertj.core.api.Assertions.*;
 import org.robolectric.annotation.Config;
 
+import checkpoint.andela.com.productivitytracker.activities.MainActivity;
 import checkpoint.andela.com.productivitytracker.fragments.StartFragment;
 
 @RunWith(RobolectricGradleTestRunner.class)

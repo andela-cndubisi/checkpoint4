@@ -10,6 +10,7 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 import static org.assertj.core.api.Assertions.*;
 
+import checkpoint.andela.com.productivitytracker.activities.MainActivity;
 import checkpoint.andela.com.productivitytracker.fragments.StartFragment;
 
 /**
