@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import static checkpoint.andela.com.productivitytracker.data.ProductivityContract.*;
-import static checkpoint.andela.com.productivitytracker.data.LocationContract.LocationEntry;
+import static checkpoint.andela.com.productivitytracker.data.ProductivityContract.LocationEntry;
 
 /**
  * Created by andela-cj on 18/10/2015.
@@ -26,17 +26,20 @@ public class ProductivityDBHelper extends SQLiteOpenHelper {
                 LocationEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 LocationEntry.COLUMN_CITY_NAME + " TEXT NOT NULL,"+
                 LocationEntry.COLUMN_LATITUDE +" REAL NOT NULL," +
-                LocationEntry.COLUMN_LONGITUDE + " REAL NOT NULL);";
+                LocationEntry.COLUMN_LONGITUDE + " REAL NOT NULL, "+
+                LocationEntry.COLUMN_PRODUCTIVITY_ID + " INTEGER NOT NULL,"+
+                " FOREIGN KEY (" + LocationEntry.COLUMN_PRODUCTIVITY_ID +") REFERENCES " +
+                ProductivityEntry.TABLE_NAME+ "("+ ProductivityEntry._ID +"));";
 
 
         final String SQL_CREATE_PRODUCTIVITY_TABLE ="CREATE TABLE " +
                 ProductivityEntry.TABLE_NAME +" ("+
                 ProductivityEntry._ID+" INTEGER PRIMARY KEY AUTOINCREMENT," +
-                ProductivityEntry.COLUMN_LOC_KEY +" INTEGER NOT NULL," +
                 ProductivityEntry.COLUMN_DATE_TEXT + " TEXT NOT NULL," +
-                ProductivityEntry.COLUMN_INTERVAL + " INTEGER NOT NULL," +
-                " FOREIGN KEY (" + ProductivityEntry.COLUMN_LOC_KEY +") REFERENCES " +
-                LocationEntry.TABLE_NAME+ "("+ LocationEntry._ID +"));";
+                ProductivityEntry.COLUMN_INTERVAL + " INTEGER NOT NULL);";
+
+
+
         Log.i(this.getClass().getSimpleName(), SQL_CREATE_PRODUCTIVITY_TABLE);
         db.execSQL(SQL_CREATE_LOCATION_TABLE);
         db.execSQL(SQL_CREATE_PRODUCTIVITY_TABLE);
