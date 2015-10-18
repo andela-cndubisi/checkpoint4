@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import static checkpoint.andela.com.productivitytracker.data.LocationContract.LocationEntry;
+import static checkpoint.andela.com.productivitytracker.data.ProductivityContract.LocationEntry;
 
 import static checkpoint.andela.com.productivitytracker.data.ProductivityContract.ProductivityEntry;
 import checkpoint.andela.com.productivitytracker.data.ProductivityDBHelper;
@@ -28,7 +28,7 @@ public class TestDb extends AndroidTestCase {
 
     }
 
-    ContentValues getLocationContentValues(){
+    public static ContentValues getLocationContentValues(long productivity_id){
         ContentValues values = new ContentValues();
 
         String testname = "Yaba, Lagos";
@@ -36,11 +36,13 @@ public class TestDb extends AndroidTestCase {
         double testlongitude = 6.04533;
         values.put(LocationEntry.COLUMN_CITY_NAME, testname);
         values.put(LocationEntry.COLUMN_LATITUDE, testlatitide);
+        values.put(LocationEntry.COLUMN_PRODUCTIVITY_ID, productivity_id);
         values.put(LocationEntry.COLUMN_LONGITUDE, testlongitude);
         return  values;
     }
 
     public static void validateCursor(ContentValues expectedValues, Cursor valueCursor){
+        assertTrue(valueCursor.moveToFirst());
         Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
         for (Map.Entry<String, Object> entry : valueSet){
             String columnName = entry.getKey();
@@ -52,11 +54,10 @@ public class TestDb extends AndroidTestCase {
     }
 
 
-    ContentValues getProductivityContentValues(long locationRowId) {
+    public static ContentValues getProductivityContentValues() {
         ContentValues productivityValues = new ContentValues();
         String testDate = "20151017";
         int testInterval = 5;
-        productivityValues.put(ProductivityEntry.COLUMN_LOC_KEY, locationRowId);
         productivityValues.put(ProductivityEntry.COLUMN_DATE_TEXT, testDate);
         productivityValues.put(ProductivityEntry.COLUMN_INTERVAL, testInterval);
 
@@ -67,18 +68,13 @@ public class TestDb extends AndroidTestCase {
 
         ProductivityDBHelper dbHelper =  new ProductivityDBHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = getLocationContentValues();
 
-
-        long locationRowId;
-        locationRowId = db.insert(LocationEntry.TABLE_NAME, null, values);
-
-        assertTrue(locationRowId != -1);
-        Log.i(TestDb.class.getSimpleName(), "New row id:" + locationRowId);
-
-        // A cursor is your primary interface to query results
-        Cursor cursor = db.query(LocationEntry.TABLE_NAME,
-                null, // column names
+        ContentValues  productivityValues = getProductivityContentValues();
+        long productivityRowId;
+        productivityRowId = db.insert(ProductivityEntry.TABLE_NAME, null, productivityValues);
+        assertTrue(productivityRowId != -1);
+        Cursor productivityCursor = db.query(ProductivityEntry.TABLE_NAME,
+                null,
                 null, // columns for the 'where' clause
                 null, // Values for the 'where' clause
                 null, // columns to group by
@@ -86,27 +82,39 @@ public class TestDb extends AndroidTestCase {
                 null // sort order
         );
 
+        //        ContentValues values = getLocationContentValues();
 
-        if (cursor.moveToFirst()){
-            validateCursor(values, cursor);
 
-            ContentValues  productivityValues = getProductivityContentValues(locationRowId);
-            long productivityRowId;
-            productivityRowId = db.insert(ProductivityEntry.TABLE_NAME, null, productivityValues);
-            assertTrue(productivityRowId != -1);
-            Cursor productivityCursor = db.query(ProductivityEntry.TABLE_NAME,
-                    null,
+        if (productivityCursor.moveToFirst()){
+            validateCursor(productivityValues, productivityCursor);
+
+            ContentValues values = getLocationContentValues(productivityRowId);
+            long locationRowId;
+            locationRowId = db.insert(LocationEntry.TABLE_NAME, null, values);
+
+            assertTrue(locationRowId != -1);
+            Log.i(TestDb.class.getSimpleName(), "New row id:" + locationRowId);
+
+            // A cursor is your primary interface to query results
+            Cursor cursor = db.query(LocationEntry.TABLE_NAME,
+                    null, // column names
                     null, // columns for the 'where' clause
                     null, // Values for the 'where' clause
                     null, // columns to group by
                     null, // columns to filter by row groups
                     null // sort order
             );
-            if (productivityCursor.moveToFirst()) {
-                validateCursor(productivityValues, productivityCursor);
+
+
+            if (cursor.moveToFirst()) {
+
+                validateCursor(values, cursor);
             }else {
                 fail("no values returned ");
             }
+
+
+
         }else{
             fail("no values returned ");
         }
