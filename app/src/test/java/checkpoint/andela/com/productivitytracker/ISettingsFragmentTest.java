@@ -10,7 +10,7 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import checkpoint.andela.com.productivitytracker.activities.MainActivity;
-import checkpoint.andela.com.productivitytracker.fragments.IntervalSettingsFragment;
+import checkpoint.andela.com.productivitytracker.fragments.SettingsFragment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,7 +28,7 @@ public class ISettingsFragmentTest {
     public void setUp() throws Exception {
         mActivity = Robolectric.buildActivity(MainActivity.class).create().start().get();
         FragmentTransaction ft = mActivity.getFragmentManager().beginTransaction();
-        IntervalSettingsFragment iSF= new IntervalSettingsFragment();
+        SettingsFragment iSF= new SettingsFragment();
         ft.add(R.id.mainActivity, iSF).commit();
     }
 

@@ -13,39 +13,46 @@
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
         android:id="@+id/detailsLayout"
-        android:gravity="bottom"
+        android:gravity="bottom|center"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
-        <GridLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/timer">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/imageView"
             android:layout_gravity="center"
+            android:paddingRight="10dp"
+            android:src="@drawable/time" />
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:columnCount="3"
-            android:rowCount="2">
+            android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/time"
-                android:textSize="50sp"
+                android:textSize="40sp"
                 android:textColor="@android:color/white"
-                android:id="@+id/duration"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:layout_columnSpan="3" />
+                android:id="@+id/duration" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
-                android:layout_row="1"
-                android:layout_column="0"
-                android:layout_columnSpan="3"
-                android:layout_height="wrap_content"
-                android:layout_gravity="fill_horizontal">
+                android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@android:color/white"
+                    android:textSize="12sp"
                     android:text="@string/H"
                     android:gravity="center" />
                 <TextView
@@ -53,11 +60,13 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
                     android:text="@string/M"
+                    android:textSize="12sp"
                     android:gravity="center"
                     android:layout_weight="1"
                     android:layout_gravity="center_horizontal" />
                 <TextView
                     android:layout_width="0dp"
+                    android:textSize="12sp"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
                     android:text="@string/S"
@@ -65,8 +74,8 @@
                     android:layout_weight="1"
                     android:layout_gravity="center_horizontal" />
             </LinearLayout>
-
-        </GridLayout>
+        </LinearLayout>
+</LinearLayout>
 
         <include
             android:layout_width="wrap_content"
@@ -119,7 +128,7 @@
             android:textColor="@android:color/white"
             android:background="@drawable/label_background_color"
             android:id="@+id/location_count_label"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
@@ -136,7 +145,7 @@
             android:paddingBottom="10dp"
             android:paddingRight="30dp"
             android:background="@drawable/circular_label_background_color"
-            android:textSize="60sp"
+            android:textSize="50sp"
             android:layout_marginLeft="-20dp"
             android:text="@string/zero"
             android:textColor="@android:color/holo_blue_dark"

@@ -28,7 +28,6 @@
             android:background="@drawable/circular_view"
             seekarc:arcColor="@android:color/holo_blue_dark"
             seekarc:clockwise="true"
-            seekarc:max="60"
             seekarc:progressColor="@android:color/white"
             seekarc:progressWidth="4dp"
             seekarc:arcWidth="2dp"
