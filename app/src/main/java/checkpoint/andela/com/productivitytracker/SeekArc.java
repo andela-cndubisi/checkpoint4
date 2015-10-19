@@ -133,7 +133,7 @@ public class SeekArc extends View {
 		 * @param progress
 		 *            The current progress level. This will be in the range
 		 *            0..max where max was set by
-		 *            {@link ProgressArc#setMax(int)}. (The default value for
+		 *            {@link SeekArc#setMax(int)}. (The default value for
 		 *            max is 100.)
 		 * @param fromUser
 		 *            True if the progress change was initiated by the user.
@@ -413,7 +413,11 @@ public class SeekArc extends View {
 		mThumbXPos = (int) (mArcRadius * Math.cos(Math.toRadians(thumbAngle)));
 		mThumbYPos = (int) (mArcRadius * Math.sin(Math.toRadians(thumbAngle)));
 	}
-	
+
+
+	public void setMax (int max){
+		mMax = max;
+	}
 	private void updateProgress(int progress, boolean fromUser) {
 
 		if (progress == INVALID_PROGRESS_VALUE) {
