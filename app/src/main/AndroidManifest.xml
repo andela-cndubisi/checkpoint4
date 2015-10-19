@@ -4,6 +4,7 @@
     <uses-feature android:glEsVersion="0x00020000"
         android:required="true"/>
 
+    
 
     <application
         android:allowBackup="true"
@@ -29,6 +30,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
             </activity>
+        <activity android:name=".activities.TrackingActivity">
+        </activity>
+        
+        <provider
+            android:authorities="checkpoint.andela.com.productivitytracker"
+            android:name=".data.ProductivityProvider"/>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
