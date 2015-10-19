@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,9 @@ import static checkpoint.andela.com.productivitytracker.fragments.SettingsFragme
  */
 public class StartFragment  extends Fragment implements SettingsFragment.iSettings {
     private ImageButton startButton;
-    private Button interval;
-
+    private Button setting;
+    private int interval;
+    Toolbar toolbar;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,12 +34,12 @@ public class StartFragment  extends Fragment implements SettingsFragment.iSettin
         Typeface face= Typeface.createFromAsset(getActivity().getAssets(), "fonts/Gotham-Light.ttf");
 
         startButton = (ImageButton)v.findViewById(R.id.start_button);
-        interval = (Button)v.findViewById(R.id.interval);
+        setting = (Button)v.findViewById(R.id.interval);
         ((TextView)v.findViewById(R.id.description)).setTypeface(face);
-        interval.setTypeface(face);
+        setting.setTypeface(face);
         startButton.setOnClickListener(onClickListener);
-        interval.setOnClickListener(onClickListener);
-
+        setting.setOnClickListener(onClickListener);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         return v;
     }
 
@@ -62,7 +64,7 @@ public class StartFragment  extends Fragment implements SettingsFragment.iSettin
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         int currentInterval = sharedpreferences.getInt(INTERVAL, 5);
         updateSettings(String.format("%d",currentInterval));
-
+        setInterval(currentInterval);
         super.onStart();
     }
 
@@ -71,16 +73,21 @@ public class StartFragment  extends Fragment implements SettingsFragment.iSettin
         settings.setIntervalDelegate(this);
         if (!settings.isVisible() )
             settings.show(getFragmentManager(), "My Settings Dialog");
-
     }
 
     private void start() {
         Intent a = new Intent(getActivity(), TrackingActivity.class);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        a.putExtra("Interval", interval);
         startActivity(a);
     }
 
+    @Override
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
 
     public void updateSettings(String progress) {
-        interval.setText((progress + " minutes"));
+        setting.setText((progress + " minutes"));
     }
 }

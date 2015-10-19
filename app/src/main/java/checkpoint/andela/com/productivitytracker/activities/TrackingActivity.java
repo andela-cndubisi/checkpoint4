@@ -1,6 +1,7 @@
 package checkpoint.andela.com.productivitytracker.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ public class TrackingActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tracking_fragment);
+        interval = getIntent().getIntExtra("Interval", 15);
         Typeface faceLight= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Light.ttf");
         Typeface faceMedium= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Medium.ttf");
         locationManager = new GoogleLocationManager(this);
@@ -63,15 +65,15 @@ public class TrackingActivity extends Activity{
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putLong("Time",starttime);
         super.onSaveInstanceState(outState);
+        outState.putLong("Time",starttime);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState !=null)
             starttime = savedInstanceState.getLong("Time");
-        super.onRestoreInstanceState(savedInstanceState);
     }
 
     private void setImageButtonOnClickListener(){
@@ -104,7 +106,7 @@ public class TrackingActivity extends Activity{
        }
 
         if (v.getId() == R.id.stop_button) {
-
+            startHistory();
         } else if (v.getId() == R.id.play_button) {
             params.addRule(11, 0);
             params2.addRule(9, 0);
@@ -160,4 +162,9 @@ public class TrackingActivity extends Activity{
 
     };
 
+    public void startHistory(){
+        Intent a = new Intent(this, HistoryActivity.class);
+        startActivity(a);
+        this.finish();
+    }
 }

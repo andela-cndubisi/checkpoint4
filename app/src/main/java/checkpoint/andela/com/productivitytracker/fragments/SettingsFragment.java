@@ -66,6 +66,7 @@ public class SettingsFragment extends DialogFragment {
                     minute = NumberFormat.getInstance().parse(minutes.getText().toString()).intValue();
                     updateSharedPreferences(minute);
                     intervalDelegate.updateSettings(String.format("%d",minute));
+                    intervalDelegate.setInterval(minute);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -106,5 +107,6 @@ public class SettingsFragment extends DialogFragment {
 
     public interface iSettings {
         void updateSettings(String progress);
+        void setInterval (int interval);
     }
 }
