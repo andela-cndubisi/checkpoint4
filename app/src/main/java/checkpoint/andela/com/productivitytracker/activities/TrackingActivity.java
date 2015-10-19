@@ -1,13 +1,13 @@
 package checkpoint.andela.com.productivitytracker.activities;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
-import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import checkpoint.andela.com.productivitytracker.TimerService;
 import checkpoint.andela.com.productivitytracker.google.manager.GoogleLocationManager;
 import checkpoint.andela.com.productivitytracker.R;
 import checkpoint.andela.com.productivitytracker.circleprogress.CircleProgressView;
@@ -28,15 +29,12 @@ public class TrackingActivity extends Activity{
     private Button playButton;
     private CircleProgressView progressView;
     private GoogleLocationManager locationManager;
-    int interval = 60;
+    int interval = 0;
     long starttime = 0L;
     long timeInMilliseconds = 0L;
     private long oldSystemTime = 0L;
     long presentTime = 0L;
-    int hr = 0;
-    int secs = 0;
-    int mins = 0;
-    Handler handler = new Handler();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +53,10 @@ public class TrackingActivity extends Activity{
         durationSpent.setTypeface(faceLight);
         numberofLocations.setTypeface(faceLight);
         progressView = (CircleProgressView) findViewById(R.id.circleView);
+        progressView.setSeekModeEnabled(false);
         progressView.setValue(0);
+
+        registerReceiver(mBroadCastReceiver, new IntentFilter("com.andela.checkpoint"));
 
         if(savedInstanceState !=null){
             starttime = savedInstanceState.getLong("Time");
@@ -114,7 +115,6 @@ public class TrackingActivity extends Activity{
                stopButton.setLayoutParams(params2);
            }
            oldSystemTime = SystemClock.uptimeMillis();
-           handler.removeCallbacks(updateTimer);
        }
 
         if (v.getId() == R.id.stop_button) {
@@ -127,7 +127,6 @@ public class TrackingActivity extends Activity{
             findViewById(R.id.action).setVisibility(View.GONE);
             presentTime += SystemClock.uptimeMillis() - oldSystemTime;
 
-            handler.postDelayed(updateTimer, 0);
         }
         }
     };
@@ -140,11 +139,6 @@ public class TrackingActivity extends Activity{
         }
     };
 
-
-    private float convertToPercentage(int interval, int value){
-        return (value/(float) interval) *100;
-    }
-
     @Override
     public void onStop() {
         locationManager.disconnect();
@@ -154,29 +148,30 @@ public class TrackingActivity extends Activity{
     @Override
     public void onStart() {
         super.onStart();
-        starttime = SystemClock.uptimeMillis();
-        handler.postDelayed(updateTimer, 0);
         locationManager.connect();
+
+        Intent intent = new Intent(this, TimerService.class);
+        intent.putExtra("Interval",interval);
+        startService(intent);
     }
-
-    public Runnable updateTimer = new Runnable() {
-
-        public void run() {
-            timeInMilliseconds =  SystemClock.uptimeMillis() - presentTime - starttime;
-            secs = (int) (timeInMilliseconds / 1000);
-            hr = mins / 60;
-            mins = secs / 60;
-            secs = secs % 60;
-            progressView.setValue(convertToPercentage(interval, mins));
-            durationSpent.setText(String.format("%02d:%02d:%02d",0,mins, secs));
-            handler.postDelayed(this, 0);
-        }
-
-    };
 
     public void startHistory(){
         Intent a = new Intent(this, HistoryActivity.class);
         startActivity(a);
         this.finish();
+    }
+
+    public BroadcastReceiver mBroadCastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            showTime(intent);
+        }
+    };
+
+    private void showTime(Intent intent){
+        String time = intent.getStringExtra("TIME");
+        float percent = intent.getFloatExtra("PERCENT",0);
+        durationSpent.setText(time);
+        progressView.setValue(percent);
     }
 }
