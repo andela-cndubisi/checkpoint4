@@ -65,15 +65,27 @@ public class TrackingActivity extends Activity{
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         outState.putLong("Time",starttime);
+        super.onSaveInstanceState(outState);
+
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState !=null)
             starttime = savedInstanceState.getLong("Time");
+        super.onRestoreInstanceState(savedInstanceState);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     private void setImageButtonOnClickListener(){
