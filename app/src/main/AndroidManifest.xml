@@ -18,24 +18,23 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.TrackingActivity" android:noHistory="true">
+        <activity android:name=".activities.TrackingActivity">
             </activity>
         <activity android:name=".activities.HistoryActivity"
             android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
-            </activity>
-        <activity android:name=".activities.TrackingActivity">
         </activity>
+
         
         <provider
             android:authorities="checkpoint.andela.com.productivitytracker"
             android:name=".data.ProductivityProvider"/>
+        <service android:name=".TimerService"/>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
