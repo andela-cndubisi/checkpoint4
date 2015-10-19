@@ -6,6 +6,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.renderscript.ScriptIntrinsicYuvToRGB;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -25,11 +27,11 @@ public class TrackingActivity extends Activity{
     private Button playButton;
     private CircleProgressView progressView;
     private GoogleLocationManager locationManager;
+    int interval = 60;
     long starttime = 0L;
     long timeInMilliseconds = 0L;
-    long timeSwapBuff = 0L;
-    long updatedtime = 0L;
-    int t = 1;
+    private long oldSystemTime = 0L;
+    long presentTime = 0L;
     int hr = 0;
     int secs = 0;
     int mins = 0;
@@ -51,9 +53,26 @@ public class TrackingActivity extends Activity{
         durationSpent.setTypeface(faceLight);
         numberofLocations.setTypeface(faceLight);
         progressView = (CircleProgressView) findViewById(R.id.circleView);
+        progressView.setValue(0);
+
+        if(savedInstanceState !=null){
+            starttime = savedInstanceState.getLong("Time");
+        }
         setImageButtonOnClickListener();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putLong("Time",starttime);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState !=null)
+            starttime = savedInstanceState.getLong("Time");
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 
     private void setImageButtonOnClickListener(){
         stopButton.setOnClickListener(onClickListener);
@@ -65,29 +84,36 @@ public class TrackingActivity extends Activity{
         @Override
         public void onClick(View v) {
 
-       if (v.getId() == R.id.pause_button){
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) playButton.getLayoutParams();
+            RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) stopButton.getLayoutParams();
+
+            if (v.getId() == R.id.pause_button){
            int mode = getResources().getConfiguration().orientation;
 
            findViewById(R.id.progress_circle).setVisibility(View.GONE);
            findViewById(R.id.action).setVisibility(View.VISIBLE);
            if (mode != 2) {
-               RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) playButton.getLayoutParams();
                params.addRule(11, -1);
                playButton.setLayoutParams(params);
 
-               RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) stopButton.getLayoutParams();
                params2.addRule(9, -1);
                stopButton.setLayoutParams(params2);
            }
-           timeSwapBuff += timeInMilliseconds;
+           oldSystemTime = SystemClock.uptimeMillis();
            handler.removeCallbacks(updateTimer);
-           t = 1;
        }
 
         if (v.getId() == R.id.stop_button) {
 
         } else if (v.getId() == R.id.play_button) {
+            params.addRule(11, 0);
+            params2.addRule(9, 0);
 
+            findViewById(R.id.progress_circle).setVisibility(View.VISIBLE);
+            findViewById(R.id.action).setVisibility(View.GONE);
+            presentTime += SystemClock.uptimeMillis() - oldSystemTime;
+
+            handler.postDelayed(updateTimer, 0);
         }
         }
     };
@@ -101,6 +127,10 @@ public class TrackingActivity extends Activity{
     };
 
 
+    private float convertToPercentage(int interval, int value){
+        return (value/(float) interval) *100;
+    }
+
     @Override
     public void onStop() {
         locationManager.disconnect();
@@ -112,21 +142,18 @@ public class TrackingActivity extends Activity{
         super.onStart();
         starttime = SystemClock.uptimeMillis();
         handler.postDelayed(updateTimer, 0);
-        t = 0;
         locationManager.connect();
     }
-
 
     public Runnable updateTimer = new Runnable() {
 
         public void run() {
-
-            timeInMilliseconds = SystemClock.uptimeMillis() - starttime;
-            updatedtime = timeSwapBuff + timeInMilliseconds;
-            secs = (int) (updatedtime / 1000);
+            timeInMilliseconds =  SystemClock.uptimeMillis() - presentTime - starttime;
+            secs = (int) (timeInMilliseconds / 1000);
             hr = mins / 60;
             mins = secs / 60;
             secs = secs % 60;
+            progressView.setValue(convertToPercentage(interval, mins));
             durationSpent.setText(String.format("%02d:%02d:%02d",0,mins, secs));
             handler.postDelayed(this, 0);
         }
