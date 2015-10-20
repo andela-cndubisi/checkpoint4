@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -52,21 +54,28 @@ public class TrackingActivity extends AppCompatActivity{
         progressView = (CircleProgressView) findViewById(R.id.circleView);
         progressView.setSeekModeEnabled(false);
         progressView.setValue(0);
+        setImageButtonOnClickListener();
         if (savedInstanceState !=null){
             trackerIntent = savedInstanceState.getParcelable("intent");
+            durationSpent.setText(savedInstanceState.getString("duration"));
+            if (savedInstanceState.getBoolean("paused"))
+                pause.performClick();
         }
-        setImageButtonOnClickListener();
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable("intent",trackerIntent);
+        outState.putString("duration", durationSpent.getText().toString());
+        outState.putBoolean("paused", trackerService.isPaused());
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         trackerIntent = savedInstanceState.getParcelable("intent");
+        durationSpent.setText(savedInstanceState.getString("duration"));
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -98,6 +107,7 @@ public class TrackingActivity extends AppCompatActivity{
             trackerIntent = new Intent(this, TimerService.class);
             bindService(trackerIntent, mConnection, Context.BIND_AUTO_CREATE);
             trackerIntent.putExtra("Interval", interval);
+            TimerService.isRunning = true;
             startService(trackerIntent);
         }
     }
@@ -127,11 +137,13 @@ public class TrackingActivity extends AppCompatActivity{
                    params2.addRule(9, -1);
                    stopButton.setLayoutParams(params2);
                }
-                trackerService.pauseTimer();
+                if (trackerService!=null)
+                     trackerService.pauseTimer();
             }
 
             if (v.getId() == R.id.stop_button) {
                 stopService(trackerIntent);
+                TimerService.isRunning = false;
                 startHistory();
             } else if (v.getId() == R.id.play_button) {
                 params.addRule(11, 0);
@@ -182,4 +194,6 @@ public class TrackingActivity extends AppCompatActivity{
         public void onServiceDisconnected(ComponentName name) {
         }
     };
+
+
 }

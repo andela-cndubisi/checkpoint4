@@ -28,6 +28,8 @@ public class TimerService extends Service {
     private Handler mHandler = new Handler();
     private final IBinder binder = new TimerBinder();
     Intent handlerIntent;
+    public static boolean isRunning = false ;
+    private boolean pause =false;
 
     @Override
     public void onCreate() {
@@ -37,10 +39,12 @@ public class TimerService extends Service {
         sendNotification();
     }
 
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        setUpHandler();
+        if (!pause)
+            setUpHandler();
         return binder;
     }
 
@@ -52,7 +56,8 @@ public class TimerService extends Service {
 
     @Override
     public void onRebind(Intent intent) {
-        mHandler.postDelayed(updateTimer, 0);
+        if (!pause)
+            mHandler.postDelayed(updateTimer, 0);
         super.onRebind(intent);
     }
 
@@ -97,6 +102,9 @@ public class TimerService extends Service {
         }
     };
 
+    public boolean isPaused(){
+        return pause;
+    }
     private void sendToActivity() {
         timeInMilliseconds =  SystemClock.uptimeMillis() - presentTime - starttime;
         secs = (int) (timeInMilliseconds / 1000);
@@ -115,6 +123,7 @@ public class TimerService extends Service {
     }
 
     public void pauseTimer() {
+        pause = true;
         oldSystemTime = SystemClock.uptimeMillis();
         mHandler.removeCallbacks(updateTimer);
     }

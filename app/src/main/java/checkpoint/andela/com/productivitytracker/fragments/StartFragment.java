@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import checkpoint.andela.com.productivitytracker.R;
+import checkpoint.andela.com.productivitytracker.TimerService;
 import checkpoint.andela.com.productivitytracker.activities.TrackingActivity;
 import static checkpoint.andela.com.productivitytracker.fragments.SettingsFragment.INTERVAL;
 
@@ -26,7 +27,6 @@ public class StartFragment  extends Fragment implements SettingsFragment.iSettin
     private ImageButton startButton;
     private Button setting;
     private int interval;
-    Toolbar toolbar;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,7 +38,6 @@ public class StartFragment  extends Fragment implements SettingsFragment.iSettin
         setting.setTypeface(face);
         startButton.setOnClickListener(onClickListener);
         setting.setOnClickListener(onClickListener);
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         return v;
     }
 
@@ -60,6 +59,9 @@ public class StartFragment  extends Fragment implements SettingsFragment.iSettin
 
     @Override
     public void onStart() {
+        if (TimerService.isRunning){
+            start();
+        }
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         int currentInterval = sharedpreferences.getInt(INTERVAL, 5);
         updateSettings(String.format("%d",currentInterval));
