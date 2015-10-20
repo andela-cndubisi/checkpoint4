@@ -176,7 +176,7 @@ public class TrackingActivity extends AppCompatActivity{
         float percent = intent.getFloatExtra("PERCENT",0);
         String count = intent.getStringExtra("#location");
         durationSpent.setText(time);
-        progressView.setValueAnimated(percent, 1);
+        progressView.setValueAnimated(percent);
         numberofLocations.setText(count);
     }
 
