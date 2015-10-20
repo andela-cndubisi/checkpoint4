@@ -32,7 +32,6 @@ public class StartFragment  extends Fragment implements SettingsFragment.iSettin
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.start_fragment, container, false);
         Typeface face= Typeface.createFromAsset(getActivity().getAssets(), "fonts/Gotham-Light.ttf");
-
         startButton = (ImageButton)v.findViewById(R.id.start_button);
         setting = (Button)v.findViewById(R.id.interval);
         ((TextView)v.findViewById(R.id.description)).setTypeface(face);
@@ -77,7 +76,6 @@ public class StartFragment  extends Fragment implements SettingsFragment.iSettin
 
     private void start() {
         Intent a = new Intent(getActivity(), TrackingActivity.class);
-        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         a.putExtra("Interval", interval);
         startActivity(a);
     }

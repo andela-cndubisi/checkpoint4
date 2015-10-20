@@ -10,9 +10,7 @@ import android.content.ServiceConnection;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,10 +29,9 @@ public class TrackingActivity extends Activity{
     private ImageButton playButton;
     private CircleProgressView progressView;
     private GoogleLocationManager locationManager;
-    int interval = 0;
+    private int interval = 0;
     private Intent trackerIntent;
-    TimerService trackerService;
-
+    private TimerService trackerService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,14 +83,12 @@ public class TrackingActivity extends Activity{
         super.onStop();
     }
 
-
     @Override
     protected void onPause() {
         unregisterReceiver(mBroadCastReceiver);
         unbindService(mConnection);
         super.onPause();
     }
-
 
     @Override
     public void onStart() {
@@ -136,6 +131,7 @@ public class TrackingActivity extends Activity{
             }
 
             if (v.getId() == R.id.stop_button) {
+                stopService(trackerIntent);
                 startHistory();
             } else if (v.getId() == R.id.play_button) {
                 params.addRule(11, 0);
@@ -156,13 +152,10 @@ public class TrackingActivity extends Activity{
         }
     };
 
-
-
     public void startHistory(){
         Intent a = new Intent(this, HistoryActivity.class);
-
         startActivity(a);
-        this.finish();
+        finish();
     }
 
     public BroadcastReceiver mBroadCastReceiver = new BroadcastReceiver() {
@@ -179,9 +172,7 @@ public class TrackingActivity extends Activity{
         progressView.setValue(percent);
     }
 
-
     private ServiceConnection mConnection = new ServiceConnection(){
-
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             TimerService.TimerBinder binder = (TimerService.TimerBinder) service;
@@ -189,7 +180,6 @@ public class TrackingActivity extends Activity{
         }
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            //
         }
     };
 }

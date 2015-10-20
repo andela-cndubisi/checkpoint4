@@ -1,6 +1,5 @@
 package checkpoint.andela.com.productivitytracker;
 
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
@@ -29,11 +28,6 @@ public class TimerService extends Service {
     private Handler mHandler = new Handler();
     private final IBinder binder = new TimerBinder();
     Intent handlerIntent;
-
-    public  void setPausedTime(long pausedTime) {
-        this.presentTime = pausedTime;
-    }
-
 
     @Override
     public void onCreate() {
@@ -64,7 +58,7 @@ public class TimerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent!=null)
+        if (intent != null)
             interval = intent.getIntExtra("Interval", 0);
         return super.onStartCommand(intent, flags, startId);
     }
@@ -115,22 +109,14 @@ public class TimerService extends Service {
         sendBroadcast(handlerIntent);
     }
 
-    public void removeCallback() {
-        mHandler.removeCallbacks(updateTimer);
-    }
-
-    public void updateCallback(){
-        mHandler.postDelayed(updateTimer, 0);
-    }
-
     public void resumeTimer() {
         presentTime += SystemClock.uptimeMillis() - oldSystemTime;
-        updateCallback();
+        mHandler.postDelayed(updateTimer, 0);
     }
 
     public void pauseTimer() {
         oldSystemTime = SystemClock.uptimeMillis();
-        removeCallback();
+        mHandler.removeCallbacks(updateTimer);
     }
 
 
