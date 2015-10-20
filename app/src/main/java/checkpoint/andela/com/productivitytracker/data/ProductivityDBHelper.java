@@ -27,22 +27,9 @@ public class ProductivityDBHelper extends SQLiteOpenHelper {
                 LocationEntry.COLUMN_CITY_NAME + " TEXT NOT NULL,"+
                 LocationEntry.COLUMN_LATITUDE +" REAL NOT NULL," +
                 LocationEntry.COLUMN_LONGITUDE + " REAL NOT NULL, "+
-                LocationEntry.COLUMN_PRODUCTIVITY_ID + " INTEGER NOT NULL,"+
-                " FOREIGN KEY (" + LocationEntry.COLUMN_PRODUCTIVITY_ID +") REFERENCES " +
-                ProductivityEntry.TABLE_NAME+ "("+ ProductivityEntry._ID +"));";
+                LocationEntry.COLUMN_DATE_TEXT + " TEXT NOT NULL);";
 
-
-        final String SQL_CREATE_PRODUCTIVITY_TABLE ="CREATE TABLE " +
-                ProductivityEntry.TABLE_NAME +" ("+
-                ProductivityEntry._ID+" INTEGER PRIMARY KEY AUTOINCREMENT," +
-                ProductivityEntry.COLUMN_DATE_TEXT + " TEXT NOT NULL," +
-                ProductivityEntry.COLUMN_INTERVAL + " INTEGER NOT NULL);";
-
-
-
-        Log.i(this.getClass().getSimpleName(), SQL_CREATE_PRODUCTIVITY_TABLE);
         db.execSQL(SQL_CREATE_LOCATION_TABLE);
-        db.execSQL(SQL_CREATE_PRODUCTIVITY_TABLE);
     }
 
     @Override

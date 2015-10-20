@@ -15,13 +15,10 @@ public class ProductivityProvider extends ContentProvider {
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
-    private static final int PRODUCTIVITY = 100;
-    private static final int PRODUCTIVITY_ID = 101;
-    private static final int PRODUCTIVITY_WITH_DATE = 102;
-    private static final int LOCATION = 300;
-    private static final int LOCATION_ID = 301;
-    private static final int LOCATION_WITH_PRODUCTIVITY = 302;
-    private static final int LOCATION_WITH_NAME = 303;
+    private static final int LOCATION = 100;
+    private static final int LOCATION_ID = 102;
+    private static final int LOCATION_WITH_DATE = 103;
+    private static final int LOCATION_WITH_NAME = 104;
 
 
     private static UriMatcher buildUriMatcher() {
@@ -35,14 +32,10 @@ public class ProductivityProvider extends ContentProvider {
         final String authority = ProductivityContract.CONTENT_AUTHORITY;
 
         // For each type of URI you want to add, create a corresponding code.
-        matcher.addURI(authority, ProductivityContract.PATH_PRODUCTIVITY, PRODUCTIVITY);
-        matcher.addURI(authority, ProductivityContract.PATH_PRODUCTIVITY + "/#", PRODUCTIVITY_ID);
-        matcher.addURI(authority, ProductivityContract.PATH_PRODUCTIVITY + "/*=*", PRODUCTIVITY_WITH_DATE);
-
         matcher.addURI(authority, ProductivityContract.PATH_LOCATION, LOCATION);
         matcher.addURI(authority, ProductivityContract.PATH_LOCATION + "/#", LOCATION_ID);
-        matcher.addURI(authority, ProductivityContract.PATH_PRODUCTIVITY + "/#", LOCATION_WITH_PRODUCTIVITY);
-        matcher.addURI(authority, ProductivityContract.PATH_PRODUCTIVITY + "/*", LOCATION_WITH_NAME);
+        matcher.addURI(authority, ProductivityContract.PATH_LOCATION + "/*", LOCATION_WITH_DATE);
+        matcher.addURI(authority, ProductivityContract.PATH_LOCATION + "/*", LOCATION_WITH_NAME);
 
 
 
@@ -63,18 +56,10 @@ public class ProductivityProvider extends ContentProvider {
 
         switch (match) {
 
-            case PRODUCTIVITY:
-                return ProductivityContract.ProductivityEntry.CONTENT_TYPE;
-            case PRODUCTIVITY_ID:
-                return ProductivityContract.ProductivityEntry.CONTENT_ITEM_TYPE;
-            case PRODUCTIVITY_WITH_DATE:
-                return ProductivityContract.ProductivityEntry.CONTENT_ITEM_TYPE;
-            case LOCATION:
+            case LOCATION_WITH_DATE:
                 return ProductivityContract.LocationEntry.CONTENT_TYPE;
-            case LOCATION_WITH_PRODUCTIVITY:
-                return ProductivityContract.ProductivityEntry.CONTENT_TYPE;
             case LOCATION_WITH_NAME:
-                return ProductivityContract.ProductivityEntry.CONTENT_TYPE;
+                return ProductivityContract.LocationEntry.CONTENT_TYPE;
             case LOCATION_ID:
                 return ProductivityContract.LocationEntry.CONTENT_ITEM_TYPE;
             default:
@@ -106,32 +91,7 @@ public class ProductivityProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             // all locations with foreign key
 
-            // "productivity"
-            case PRODUCTIVITY: {
-                retCursor = dbHelper.getReadableDatabase().query(
-                        ProductivityContract.ProductivityEntry.TABLE_NAME,
-                        null,
-                        null ,
-                        null,
-                        null,
-                        null,
-                        null
-                );
-                break;
-            }
-            // "productivity"
-            case PRODUCTIVITY_WITH_DATE: {
-                retCursor = dbHelper.getReadableDatabase().query(
-                        ProductivityContract.ProductivityEntry.TABLE_NAME,
-                        projection,
-                        selection ,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
-                );
-                break;
-            }
+
             case LOCATION: {
                 retCursor = dbHelper.getReadableDatabase().query(
                         ProductivityContract.LocationEntry.TABLE_NAME,
@@ -156,7 +116,7 @@ public class ProductivityProvider extends ContentProvider {
                 );
                 break;
             }
-            case LOCATION_WITH_PRODUCTIVITY:
+            case LOCATION_WITH_DATE:
             {
                 retCursor = dbHelper.getReadableDatabase().query(
                         ProductivityContract.LocationEntry.TABLE_NAME,
@@ -188,4 +148,6 @@ public class ProductivityProvider extends ContentProvider {
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
     }
+
+
 }
