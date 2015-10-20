@@ -32,7 +32,7 @@
         <provider
             android:authorities="checkpoint.andela.com.productivitytracker"
             android:name=".data.ProductivityProvider"/>
-        <service android:name=".TimerService"/>
+        <service android:name=".TrackerService"/>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>

@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import checkpoint.andela.com.productivitytracker.R;
-import checkpoint.andela.com.productivitytracker.TimerService;
+import checkpoint.andela.com.productivitytracker.TrackerService;
 import checkpoint.andela.com.productivitytracker.activities.TrackingActivity;
 import static checkpoint.andela.com.productivitytracker.fragments.SettingsFragment.INTERVAL;
 
@@ -59,7 +58,7 @@ public class StartFragment  extends Fragment implements SettingsFragment.iSettin
 
     @Override
     public void onStart() {
-        if (TimerService.isRunning){
+        if (TrackerService.isRunning){
             start();
         }
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());

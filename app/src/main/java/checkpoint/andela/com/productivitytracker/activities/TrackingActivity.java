@@ -15,8 +15,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import checkpoint.andela.com.productivitytracker.TimerService;
-import checkpoint.andela.com.productivitytracker.google.manager.GoogleLocationManager;
+import checkpoint.andela.com.productivitytracker.TrackerService;
 import checkpoint.andela.com.productivitytracker.R;
 import checkpoint.andela.com.productivitytracker.circleprogress.CircleProgressView;
 
@@ -28,10 +27,9 @@ public class TrackingActivity extends AppCompatActivity{
     private ImageButton stopButton;
     private ImageButton playButton;
     private CircleProgressView progressView;
-    private GoogleLocationManager locationManager;
     private int interval = 0;
     private Intent trackerIntent;
-    private TimerService trackerService;
+    private TrackerService trackerService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +38,6 @@ public class TrackingActivity extends AppCompatActivity{
         interval = getIntent().getIntExtra("Interval", interval);
         Typeface faceLight= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Light.ttf");
         Typeface faceMedium= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Medium.ttf");
-        locationManager = new GoogleLocationManager(this);
-        locationManager.setInterval(interval);
         durationSpent = (TextView)findViewById(R.id.duration);
         pause = (ImageButton) findViewById(R.id.pause_button);
         stopButton = (ImageButton)findViewById(R.id.stop_button);
@@ -87,7 +83,6 @@ public class TrackingActivity extends AppCompatActivity{
 
     @Override
     public void onStop() {
-        locationManager.disconnect();
         super.onStop();
     }
 
@@ -101,12 +96,11 @@ public class TrackingActivity extends AppCompatActivity{
     @Override
     public void onStart() {
         super.onStart();
-        locationManager.connect();
         if (trackerIntent == null){
-            trackerIntent = new Intent(this, TimerService.class);
+            trackerIntent = new Intent(this, TrackerService.class);
             bindService(trackerIntent, mConnection, Context.BIND_AUTO_CREATE);
             trackerIntent.putExtra("Interval", interval);
-            TimerService.isRunning = true;
+            TrackerService.isRunning = true;
             startService(trackerIntent);
         }
     }
@@ -142,7 +136,7 @@ public class TrackingActivity extends AppCompatActivity{
 
             if (v.getId() == R.id.stop_button) {
                 stopService(trackerIntent);
-                TimerService.isRunning = false;
+                TrackerService.isRunning = false;
                 startHistory();
             } else if (v.getId() == R.id.play_button) {
                 params.addRule(11, 0);
@@ -178,22 +172,20 @@ public class TrackingActivity extends AppCompatActivity{
 
     float oldvalue= 0;
     private void showTime(Intent intent){
-        if (locationManager.didChange()){
-            trackerService.resetTimer();
-            locationManager.saveLocation();
-            numberofLocations.setText(String.format("%d",locationManager.getRecordedLocations()));
-        }
+
         String time = intent.getStringExtra("TIME");
         float percent = intent.getFloatExtra("PERCENT",0);
+        String count = intent.getStringExtra("#location");
         durationSpent.setText(time);
-        progressView.setValueAnimated(oldvalue,percent, 500L);
+        progressView.setValueAnimated(oldvalue, percent, 100L);
+        numberofLocations.setText(count);
         oldvalue = percent;
     }
 
     private ServiceConnection mConnection = new ServiceConnection(){
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            TimerService.TimerBinder binder = (TimerService.TimerBinder) service;
+            TrackerService.TimerBinder binder = (TrackerService.TimerBinder) service;
             trackerService = binder.getService();
         }
         @Override
