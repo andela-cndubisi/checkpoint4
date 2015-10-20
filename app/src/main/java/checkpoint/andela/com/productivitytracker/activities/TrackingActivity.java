@@ -1,6 +1,5 @@
 package checkpoint.andela.com.productivitytracker.activities;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,6 +9,7 @@ import android.content.ServiceConnection;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -21,7 +21,7 @@ import checkpoint.andela.com.productivitytracker.R;
 import checkpoint.andela.com.productivitytracker.circleprogress.CircleProgressView;
 
 
-public class TrackingActivity extends Activity{
+public class TrackingActivity extends AppCompatActivity{
     private TextView durationSpent;
     private ImageButton pause;
     private TextView numberofLocations;

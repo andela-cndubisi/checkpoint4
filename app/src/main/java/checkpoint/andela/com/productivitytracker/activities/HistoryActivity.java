@@ -17,7 +17,6 @@ import checkpoint.andela.com.productivitytracker.RVAdapter;
 
 
 public class HistoryActivity extends AppCompatActivity {
-    Toolbar toolbar;
     RecyclerView rv ;
     private List<History> persons;
 
@@ -31,11 +30,6 @@ public class HistoryActivity extends AppCompatActivity {
         initializeData();
         RVAdapter adapter = new RVAdapter(persons);
         rv.setAdapter(adapter);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.left);
-        toolbar.setTitle("History");
-        setSupportActionBar(toolbar);
-
     }
     private void initializeData(){
         persons = new ArrayList<>();

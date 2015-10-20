@@ -1,15 +1,14 @@
 package checkpoint.andela.com.productivitytracker.activities;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import checkpoint.andela.com.productivitytracker.R;
 import checkpoint.andela.com.productivitytracker.fragments.StartFragment;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
 
     StartFragment startFragment;
-    TrackingActivity trackingFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
