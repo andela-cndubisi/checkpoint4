@@ -74,7 +74,7 @@ public class TrackerService extends Service {
     @Override
     public boolean onUnbind(Intent intent) {
         mHandler.removeCallbacks(updateTimer);
-        locationManager.disconnect();
+        if (pause) locationManager.disconnect();
         return true;
     }
 
@@ -156,12 +156,15 @@ public class TrackerService extends Service {
     public void resumeTimer() {
         presentTime += SystemClock.uptimeMillis() - oldSystemTime;
         mHandler.postDelayed(updateTimer, 0);
+        locationManager.connect();
         pause = false;
     }
 
     public void pauseTimer() {
         pause = true;
         oldSystemTime = SystemClock.uptimeMillis();
+
+        locationManager.disconnect();
         mHandler.removeCallbacks(updateTimer);
     }
 
