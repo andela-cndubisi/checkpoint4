@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
             getFragmentManager().beginTransaction().add(R.id.container, startFragment).commit();
         }
     }
-
     public StartFragment getStartFragment() {
         return startFragment;
     }

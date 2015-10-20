@@ -6,11 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -40,6 +38,7 @@ public class TrackingActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tracking_fragment);
         interval = getIntent().getIntExtra("Interval", interval);
+        interval = 1;
         Typeface faceLight= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Light.ttf");
         Typeface faceMedium= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Medium.ttf");
         locationManager = new GoogleLocationManager(this);
@@ -179,8 +178,10 @@ public class TrackingActivity extends AppCompatActivity{
     };
 
     private void showTime(Intent intent){
-        if (locationManager.loactionChanged()){
+        if (locationManager.didChange()){
             trackerService.resetTimer();
+            locationManager.saveLocation();
+            numberofLocations.setText(String.format("%d",locationManager.getRecordedLocations()));
         }
         String time = intent.getStringExtra("TIME");
         float percent = intent.getFloatExtra("PERCENT",0);
