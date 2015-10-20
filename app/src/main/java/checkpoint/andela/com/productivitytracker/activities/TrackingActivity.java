@@ -170,16 +170,14 @@ public class TrackingActivity extends AppCompatActivity{
         }
     };
 
-    float oldvalue= 0;
     private void showTime(Intent intent){
 
         String time = intent.getStringExtra("TIME");
         float percent = intent.getFloatExtra("PERCENT",0);
         String count = intent.getStringExtra("#location");
         durationSpent.setText(time);
-        progressView.setValueAnimated(oldvalue, percent, 100L);
+        progressView.setValueAnimated(percent, 1);
         numberofLocations.setText(count);
-        oldvalue = percent;
     }
 
     private ServiceConnection mConnection = new ServiceConnection(){
