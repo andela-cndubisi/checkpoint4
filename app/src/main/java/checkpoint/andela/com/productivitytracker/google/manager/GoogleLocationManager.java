@@ -21,6 +21,8 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
 
     private Activity mActivity;
     private GoogleApiClient mGoogleClient;
+    private int interval = 1000;
+
     public GoogleLocationManager(Activity activity) {
         mActivity = activity;
         mGoogleClient = new GoogleApiClient.Builder(activity).addApi(LocationServices.API)
@@ -33,7 +35,7 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
     public void onConnected(Bundle bundle) {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(10000);
+        locationRequest.setInterval(getInterval());
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleClient,locationRequest,this);
     }
 
@@ -50,6 +52,10 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
         Log.i("My Current Location", String.format("Latitude: %f\n Longitude: %f", location.getLatitude(), location.getLongitude()));
     }
 
+    public boolean loactionChanged(){
+        return false;
+    }
+
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
@@ -57,5 +63,13 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
 
     public void disconnect(){
         mGoogleClient.disconnect();
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
+    private int getInterval(){
+
+        return (interval/5) * 1000;
     }
 }

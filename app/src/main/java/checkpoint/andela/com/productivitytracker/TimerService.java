@@ -16,18 +16,18 @@ import android.widget.RemoteViews;
  * Created by andela-cj on 19/10/2015.
  */
 public class TimerService extends Service {
-    int interval = 0;
-    long starttime = 0L;
-    long timeInMilliseconds = 0L;
+    private int interval = 0;
+    private long starttime = 0L;
+    private long timeInMilliseconds = 0L;
     private long oldSystemTime = 0L;
-    String time;
-    long presentTime = 0L;
-    int hr = 0;
-    int secs = 0;
-    int mins = 0;
+    private String time;
+    private long presentTime = 0L;
+    private int hr = 0;
+    private int secs = 0;
+    private int mins = 0;
     private Handler mHandler = new Handler();
     private final IBinder binder = new TimerBinder();
-    Intent handlerIntent;
+    private Intent handlerIntent;
     public static boolean isRunning = false ;
     private boolean pause =false;
 
@@ -126,6 +126,11 @@ public class TimerService extends Service {
         pause = true;
         oldSystemTime = SystemClock.uptimeMillis();
         mHandler.removeCallbacks(updateTimer);
+    }
+
+    public void resetTimer() {
+        starttime = SystemClock.uptimeMillis();
+        presentTime = 0L;
     }
 
 
