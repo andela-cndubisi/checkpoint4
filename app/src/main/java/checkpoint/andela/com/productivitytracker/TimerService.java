@@ -120,6 +120,7 @@ public class TimerService extends Service {
     public void resumeTimer() {
         presentTime += SystemClock.uptimeMillis() - oldSystemTime;
         mHandler.postDelayed(updateTimer, 0);
+        pause = false;
     }
 
     public void pauseTimer() {

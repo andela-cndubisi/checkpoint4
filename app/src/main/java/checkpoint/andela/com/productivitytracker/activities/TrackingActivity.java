@@ -38,7 +38,6 @@ public class TrackingActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tracking_fragment);
         interval = getIntent().getIntExtra("Interval", interval);
-        interval = 1;
         Typeface faceLight= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Light.ttf");
         Typeface faceMedium= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Medium.ttf");
         locationManager = new GoogleLocationManager(this);
@@ -177,6 +176,7 @@ public class TrackingActivity extends AppCompatActivity{
         }
     };
 
+    float oldvalue= 0;
     private void showTime(Intent intent){
         if (locationManager.didChange()){
             trackerService.resetTimer();
@@ -186,7 +186,8 @@ public class TrackingActivity extends AppCompatActivity{
         String time = intent.getStringExtra("TIME");
         float percent = intent.getFloatExtra("PERCENT",0);
         durationSpent.setText(time);
-        progressView.setValue(percent);
+        progressView.setValueAnimated(oldvalue,percent, 500L);
+        oldvalue = percent;
     }
 
     private ServiceConnection mConnection = new ServiceConnection(){

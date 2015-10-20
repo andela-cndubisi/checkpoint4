@@ -115,7 +115,7 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
     }
 
     private int getInterval(){
-        return (interval/5) * 1000;
+        return (interval/5) * 10000;
     }
 
     public void saveLocation() {
