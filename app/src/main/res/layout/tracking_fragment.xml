@@ -120,7 +120,7 @@
         layout="@layout/action" />
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -135,6 +135,7 @@
             android:textColor="@android:color/white"
             android:background="@drawable/label_background_color"
             android:id="@+id/location_count_label"
+            android:layout_centerVertical="true"
             android:textSize="20sp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
@@ -153,13 +154,14 @@
             android:paddingRight="20dp"
             android:background="@drawable/circular_label_background_color"
             android:textSize="60sp"
+            android:layout_toRightOf="@+id/location_count_label"
             android:layout_marginLeft="-20dp"
             android:text="@string/zero"
             android:textColor="@android:color/holo_blue_dark"
             android:layout_gravity="center_vertical"
              />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

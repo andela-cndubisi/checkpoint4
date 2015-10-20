@@ -7,20 +7,22 @@
     android:background="@color/blue_background"
     tools:context="checkpoint.andela.com.productivitytracker.activities.TrackingActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
         android:id="@+id/detailsLayout"
-        android:gravity="bottom|center"
+        android:gravity="bottom|center_vertical"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_alignParentLeft="true"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_gravity="center_vertical"
         android:orientation="horizontal"
         android:layout_marginBottom="10dp"
         android:id="@+id/timer">
@@ -80,20 +82,22 @@
         <include
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:id="@+id/action"
             android:visibility="gone"
             layout="@layout/action" />
 
         <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:id="@+id/progress_circle">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_centerInParent="true"
+            android:id="@+id/progress_circle">
 
         <checkpoint.andela.com.productivitytracker.circleprogress.CircleProgressView
             android:id="@+id/circleView"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             CircleProgressView:cpv_barColor="#d3fa35"
             CircleProgressView:cpv_barWidth="15dp"
             CircleProgressView:cpv_contourSize="0dp"
@@ -107,8 +111,8 @@
             CircleProgressView:cpv_unitColor="#009688"/>
 
         <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:background="@drawable/pause_button_background"
             android:src="@drawable/pause"
             android:layout_gravity="center"
@@ -116,10 +120,13 @@
 
     </FrameLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:gravity="center_vertical|end|right"
+        android:layout_centerInParent="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_gravity="center">
         <TextView
             android:layout_width="wrap_content"
@@ -128,11 +135,13 @@
             android:textColor="@android:color/white"
             android:background="@drawable/label_background_color"
             android:id="@+id/location_count_label"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:layout_centerVertical="true"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
+            android:gravity="center"
             android:layout_gravity="center_vertical"
             />
 
@@ -145,16 +154,19 @@
             android:paddingBottom="10dp"
             android:paddingRight="30dp"
             android:background="@drawable/circular_label_background_color"
-            android:textSize="50sp"
+            android:textSize="40sp"
             android:layout_marginLeft="-20dp"
+            android:layout_toRightOf="@id/location_count_label"
+            android:layout_toEndOf="@+id/location_count_label"
             android:text="@string/zero"
             android:textColor="@android:color/holo_blue_dark"
+            android:gravity="center"
             android:layout_gravity="center_vertical"
              />
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <fragment
         xmlns:android="http://schemas.android.com/apk/res/android"
