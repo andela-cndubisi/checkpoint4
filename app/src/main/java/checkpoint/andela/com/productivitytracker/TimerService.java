@@ -2,20 +2,15 @@ package checkpoint.andela.com.productivitytracker;
 
 import android.app.IntentService;
 import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
@@ -31,9 +26,13 @@ public class TimerService extends Service {
     int hr = 0;
     int secs = 0;
     int mins = 0;
-
-    private final Handler mHandler = new Handler();
+    private Handler mHandler = new Handler();
+    private final IBinder binder = new TimerBinder();
     Intent handlerIntent;
+
+    public  void setPausedTime(long pausedTime) {
+        this.presentTime = pausedTime;
+    }
 
 
     @Override
@@ -41,20 +40,32 @@ public class TimerService extends Service {
         super.onCreate();
         handlerIntent = new Intent("com.andela.checkpoint");
         starttime = SystemClock.uptimeMillis();
-        setUpHandler();
         sendNotification();
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        setUpHandler();
+        return binder;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        mHandler.removeCallbacks(updateTimer);
+        return true;
+    }
+
+    @Override
+    public void onRebind(Intent intent) {
+        mHandler.postDelayed(updateTimer, 0);
+        super.onRebind(intent);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent!=null)
-            interval = intent.getIntExtra("Interval",0);
+            interval = intent.getIntExtra("Interval", 0);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -80,11 +91,11 @@ public class TimerService extends Service {
     }
 
     private void setUpHandler() {
-        mHandler.removeCallbacks(sendMessage);
-        mHandler.postDelayed(sendMessage, 0);
+        mHandler.removeCallbacks(updateTimer);
+        mHandler.postDelayed(updateTimer, 0);
     }
 
-    private Runnable sendMessage = new Runnable() {
+    private Runnable updateTimer = new Runnable() {
         @Override
         public void run() {
             sendToActivity();
@@ -102,5 +113,30 @@ public class TimerService extends Service {
         handlerIntent.putExtra("TIME", time);
         handlerIntent.putExtra("PERCENT", convertToPercentage(interval,mins));
         sendBroadcast(handlerIntent);
+    }
+
+    public void removeCallback() {
+        mHandler.removeCallbacks(updateTimer);
+    }
+
+    public void updateCallback(){
+        mHandler.postDelayed(updateTimer, 0);
+    }
+
+    public void resumeTimer() {
+        presentTime += SystemClock.uptimeMillis() - oldSystemTime;
+        updateCallback();
+    }
+
+    public void pauseTimer() {
+        oldSystemTime = SystemClock.uptimeMillis();
+        removeCallback();
+    }
+
+
+    public class TimerBinder extends Binder {
+        public TimerService getService() {
+            return TimerService.this;
+        }
     }
 }
