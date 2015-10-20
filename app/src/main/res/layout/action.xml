@@ -7,22 +7,22 @@
     android:id="@+id/pause_play_layout"
     android:gravity="center"
     >
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="15dp"
-        android:drawableLeft="@drawable/stop"
+        android:src="@drawable/stop"
         android:id="@+id/stop_button"
         android:text=""
         android:layout_marginLeft="20dp"
         android:background="@drawable/circular_view"/>
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/circular_view"
         android:padding="15dp"
-        android:drawableLeft="@drawable/play"
+        android:src="@drawable/play"
         android:layout_marginRight="20dp"
         android:id="@+id/play_button"/>
 </RelativeLayout>

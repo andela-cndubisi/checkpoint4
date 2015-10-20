@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
     android:id="@+id/pause_play_layout">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/stop"
-        android:padding="15dp"
-        android:text=" Stop"
-        android:id="@+id/stop_button"/>
-
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/play"
-        android:text="Start"
+        android:src="@drawable/stop"
+        android:padding="15dp"
+        android:id="@+id/stop_button"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/play"
+        android:layout_toRightOf="@+id/stop_button"
         android:padding="15dp"
         android:id="@+id/play_button"/>
-</LinearLayout>
+</RelativeLayout>
