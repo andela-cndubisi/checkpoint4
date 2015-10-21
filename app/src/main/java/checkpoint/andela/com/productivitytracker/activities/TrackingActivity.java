@@ -149,16 +149,9 @@ public class TrackingActivity extends AppCompatActivity{
         }
     };
 
-    View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View v) {
-            //TODO  add nike's long hold on stop to stop, show progress window around pause button
-            return true;
-        }
-    };
-
     public void startHistory(){
-        Intent a = new Intent(this, HistoryActivity.class);
+
+        Intent a = new Intent(this, LogActivity.class);
         startActivity(a);
         finish();
     }
@@ -171,7 +164,6 @@ public class TrackingActivity extends AppCompatActivity{
     };
 
     private void showTime(Intent intent){
-
         String time = intent.getStringExtra("TIME");
         float percent = intent.getFloatExtra("PERCENT",0);
         String count = intent.getStringExtra("#location");
