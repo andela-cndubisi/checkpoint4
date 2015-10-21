@@ -25,8 +25,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.HistoryViewHolder>
     public void onBindViewHolder(HistoryViewHolder holder, int position) {
         holder.date.setText(item.get(position).date);
         holder.positions.setText(item.get(position).position);
-
+        if(item.get(position).timespent != 0){
+            holder.timespent.setText(String.format("%d",item.get(position).timespent));
+        }
     }
+
     public int getItemCount() {
         return item.size();
     }
@@ -35,12 +38,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.HistoryViewHolder>
         CardView cv;
         TextView date;
         TextView positions;
+        TextView timespent;
 
         HistoryViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
             date = (TextView)itemView.findViewById(R.id.date_holder);
             positions = (TextView)itemView.findViewById(R.id.no_of_position);
+            timespent = (TextView)itemView.findViewById(R.id.time_spent);
         }
 
     }
