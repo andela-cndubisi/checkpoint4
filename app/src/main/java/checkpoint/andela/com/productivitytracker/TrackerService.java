@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -91,8 +93,8 @@ public class TrackerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null)
             interval = intent.getIntExtra("Interval", 0);
-        locationManager.setInterval(interval);
-        locationManager.connect();
+            locationManager.setInterval(interval);
+            locationManager.connect();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -208,6 +210,7 @@ public class TrackerService extends Service {
         public void connect(){
             mGoogleClient.connect();
         }
+
         @Override
         public void onConnectionSuspended(int i) {
 
@@ -264,14 +267,21 @@ public class TrackerService extends Service {
             SQLiteDatabase db = new ProductivityDBHelper(getApplicationContext())
                     .getWritableDatabase();
 
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS", Locale.US);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             Date date = new Date();
-            String today = dateFormat.format(date).split(" ")[0];
+            String today = dateFormat.format(date);
+            Geocoder coder = new Geocoder(getApplicationContext(), Locale.US);
+            String address = "";
+            try {
+                 address = coder.getFromLocation(currentLocation.getLatitude(),currentLocation.getLongitude(),1).get(0).getAddressLine(0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             ContentValues values = ProductivityContract.LocationEntry.createContentFromLocation(
                     currentLocation.getLongitude()
                     , currentLocation.getLatitude()
-                    , ""
-                    , today);
+                    , address
+                    , today, interval);
             long rowId = db.insert(ProductivityContract.LocationEntry.TABLE_NAME, null, values);
             if (rowId !=-1)
                 recordedLocations++;
