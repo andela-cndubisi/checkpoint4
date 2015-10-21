@@ -31,6 +31,7 @@ public class ProductivityDBHelper extends SQLiteOpenHelper {
                 LocationEntry.COLUMN_CITY_NAME + " TEXT NOT NULL,"+
                 LocationEntry.COLUMN_LATITUDE +" REAL NOT NULL," +
                 LocationEntry.COLUMN_LONGITUDE + " REAL NOT NULL, "+
+                LocationEntry.COLUMN_INTERVAL + " INTEGER NOT NULL, "+
                 LocationEntry.COLUMN_DATE_TEXT + " TEXT NOT NULL);";
 
         db.execSQL(SQL_CREATE_LOCATION_TABLE);
@@ -42,24 +43,55 @@ public class ProductivityDBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<DateCount> getDateWithCount(){
+        final String COLUMN_SELECTION = "Count("+LocationEntry.COLUMN_DATE_TEXT+")";
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<DateCount> list = new ArrayList<>();
         Cursor cursor = db.query(true
                     , LocationEntry.TABLE_NAME
-                    , new String[]{"Count("+LocationEntry.COLUMN_DATE_TEXT+")", LocationEntry.COLUMN_DATE_TEXT}
+                    , new String[]{COLUMN_SELECTION, LocationEntry.COLUMN_DATE_TEXT}
                     , null
                     , null
                     , LocationEntry.COLUMN_DATE_TEXT
                     , null
                     , null
-                    , null /* limit */);
-
+                    , null);
 
         for (int i =0; i< cursor.getCount(); i++){
              if (cursor.moveToNext()) {
-                 int countIdx = cursor.getColumnIndex("Count("+LocationEntry.COLUMN_DATE_TEXT+")");
+                 int countIdx = cursor.getColumnIndex(COLUMN_SELECTION);
                  int dateIdx = cursor.getColumnIndex(LocationEntry.COLUMN_DATE_TEXT);
                  DateCount history = new DateCount(cursor.getString(dateIdx),cursor.getInt(countIdx),0);
+                list.add(history);
+            }
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+
+    public ArrayList<DateCount> getSumLocationWithInterval(){
+        final String newColumnName = "count";
+        final String COLUMN_SELECTION = "sum("+LocationEntry.COLUMN_INTERVAL+")";
+        final String newColumn = "(select count("+LocationEntry.COLUMN_CITY_NAME+") " +
+                " from "+LocationEntry.TABLE_NAME+" group by "+
+                LocationEntry.COLUMN_CITY_NAME+") ";
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<DateCount> list = new ArrayList<>();
+        Cursor cursor = db.rawQuery(
+                "select "+COLUMN_SELECTION+", "+
+                LocationEntry.COLUMN_CITY_NAME+"," +newColumn +
+                        " as " + newColumnName +
+                " from "+LocationEntry.TABLE_NAME+" group by "+LocationEntry.COLUMN_CITY_NAME, null);
+
+        for (int i =0; i< cursor.getCount(); i++){
+            if (cursor.moveToNext()) {
+                int sumIdx = cursor.getColumnIndex(COLUMN_SELECTION);
+                int cityIdx = cursor.getColumnIndex(LocationEntry.COLUMN_CITY_NAME);
+                int countIdx = cursor.getColumnIndex(newColumnName);
+                DateCount history = new DateCount(cursor.getString(cityIdx),cursor.getInt(countIdx),cursor.getLong(sumIdx));
                 list.add(history);
             }
         }
