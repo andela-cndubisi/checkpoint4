@@ -30,18 +30,21 @@ public class ProductivityContract {
         public static final String COLUMN_LONGITUDE = "longitude";
         public static final String COLUMN_CITY_NAME = "city_name";
         public static final String COLUMN_DATE_TEXT = "date";
+        public static final String COLUMN_INTERVAL = "date";
+
 
 
         public static Uri buildLocationUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static ContentValues createContentFromLocation(double longitude, double latitude, String name, String date){
+        public static ContentValues createContentFromLocation(double longitude, double latitude, String name, String date, int duration){
             ContentValues values = new ContentValues();
             values.put(COLUMN_LATITUDE, latitude);
             values.put(COLUMN_LONGITUDE, longitude);
             values.put(COLUMN_CITY_NAME, name);
             values.put(COLUMN_DATE_TEXT, date);
+            values.put(COLUMN_INTERVAL, duration);
             return values;
         }
     }
