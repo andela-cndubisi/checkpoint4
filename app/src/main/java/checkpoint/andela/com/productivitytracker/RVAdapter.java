@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import checkpoint.andela.com.productivitytracker.activities.HistoryActivity;
-
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.HistoryViewHolder>{
 
 
@@ -47,9 +45,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.HistoryViewHolder>
 
     }
 
-    List<HistoryActivity.History> item;
+    List<DateCount> item;
 
-    public RVAdapter(List<HistoryActivity.History> item){
+    public RVAdapter(List<DateCount> item){
         this.item = item;
     }
+
+
 }
