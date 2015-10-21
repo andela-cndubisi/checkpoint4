@@ -30,7 +30,7 @@ public class ProductivityContract {
         public static final String COLUMN_LONGITUDE = "longitude";
         public static final String COLUMN_CITY_NAME = "city_name";
         public static final String COLUMN_DATE_TEXT = "date";
-        public static final String COLUMN_INTERVAL = "date";
+        public static final String COLUMN_INTERVAL = "interval";
 
 
 
