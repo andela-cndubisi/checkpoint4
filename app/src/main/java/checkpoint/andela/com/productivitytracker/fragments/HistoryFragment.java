@@ -16,6 +16,7 @@ import java.util.List;
 import checkpoint.andela.com.productivitytracker.DateCount;
 import checkpoint.andela.com.productivitytracker.R;
 import checkpoint.andela.com.productivitytracker.RVAdapter;
+import checkpoint.andela.com.productivitytracker.activities.MapActivity;
 import checkpoint.andela.com.productivitytracker.data.ProductivityContract;
 import checkpoint.andela.com.productivitytracker.data.ProductivityDBHelper;
 
@@ -43,17 +44,8 @@ public class HistoryFragment extends Fragment {
         else  populateData(address);
         RVAdapter adapter = new RVAdapter(records);
         rv.setAdapter(adapter);
-        rv.setOnClickListener(onClickListener);
         return view;
     }
-
-
-    RecyclerView.OnClickListener onClickListener = new RecyclerView.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-        }
-    };
 
     private void populateData(boolean val) {
         ProductivityDBHelper dbHelper = new ProductivityDBHelper(getActivity());
