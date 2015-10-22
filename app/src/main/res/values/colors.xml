@@ -2,10 +2,10 @@
 <resources>
     <color name="colorPrimary">#3b95b4</color>
     <color name="colorPrimaryDark">#35829c</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#67d9ff</color>
     <color name="progress_gray">#FFD8D8D8</color>
     <color name="progress_gray_dark">#FF383838</color>
-    <color name="blue_background">#25434d</color>67d9ff
+    <color name="blue_background">#25434d</color>
     <color name="interval_descriptor_color">#67d9ff</color>
     <color name="interval_button_color">#fff9c4</color>
 </resources>
