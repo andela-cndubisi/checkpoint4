@@ -1,11 +1,10 @@
 package checkpoint.andela.com.productivitytracker.activities;
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -15,12 +14,16 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.MapFragment;
+
+import checkpoint.andela.com.productivitytracker.managers.ServiceManager;
 import checkpoint.andela.com.productivitytracker.TrackerService;
 import checkpoint.andela.com.productivitytracker.R;
 import checkpoint.andela.com.productivitytracker.circleprogress.CircleProgressView;
+import checkpoint.andela.com.productivitytracker.google.manager.GoogleMapManager;
 
 
-public class TrackingActivity extends AppCompatActivity{
+public class TrackingActivity extends AppCompatActivity implements ServiceManager.ServiceManagerDelegate{
     private TextView durationSpent;
     private ImageButton pause;
     private TextView numberofLocations;
@@ -30,7 +33,8 @@ public class TrackingActivity extends AppCompatActivity{
     private int interval = 0;
     private Intent trackerIntent;
     private TrackerService trackerService;
-
+    GoogleMapManager mapManager;
+    ServiceManager serviceManager = new ServiceManager();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,8 @@ public class TrackingActivity extends AppCompatActivity{
         progressView = (CircleProgressView) findViewById(R.id.circleView);
         progressView.setSeekModeEnabled(false);
         progressView.setValue(0);
+        serviceManager.setDelegate(this);
+
         setImageButtonOnClickListener();
         if (savedInstanceState !=null){
             trackerIntent = savedInstanceState.getParcelable("intent");
@@ -58,6 +64,16 @@ public class TrackingActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (Configuration.ORIENTATION_LANDSCAPE == newConfig.orientation){
+            MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment);
+            if (mapFragment!= null){
+                mapManager = new GoogleMapManager(mapFragment);
+            }
+        }
+        super.onConfigurationChanged(newConfig);
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -76,8 +92,8 @@ public class TrackingActivity extends AppCompatActivity{
 
     @Override
     protected void onResume() {
-        bindService(trackerIntent, mConnection, Context.BIND_AUTO_CREATE);
-        registerReceiver(mBroadCastReceiver, new IntentFilter("com.andela.checkpoint"));
+        bindService(trackerIntent, serviceManager.getServiceConnection(), Context.BIND_AUTO_CREATE);
+        registerReceiver(serviceManager.getBroadCastReceiver(), new IntentFilter("com.andela.checkpoint"));
         super.onResume();
     }
 
@@ -88,8 +104,8 @@ public class TrackingActivity extends AppCompatActivity{
 
     @Override
     protected void onPause() {
-        unregisterReceiver(mBroadCastReceiver);
-        unbindService(mConnection);
+        unregisterReceiver(serviceManager.getBroadCastReceiver());
+        unbindService(serviceManager.getServiceConnection());
         super.onPause();
     }
 
@@ -98,7 +114,7 @@ public class TrackingActivity extends AppCompatActivity{
         super.onStart();
         if (trackerIntent == null){
             trackerIntent = new Intent(this, TrackerService.class);
-            bindService(trackerIntent, mConnection, Context.BIND_AUTO_CREATE);
+            bindService(trackerIntent, serviceManager.getServiceConnection(), Context.BIND_AUTO_CREATE);
             trackerIntent.putExtra("Interval", interval);
             TrackerService.isRunning = true;
             startService(trackerIntent);
@@ -156,32 +172,21 @@ public class TrackingActivity extends AppCompatActivity{
         finish();
     }
 
-    public BroadcastReceiver mBroadCastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            showTime(intent);
-        }
-    };
-
-    private void showTime(Intent intent){
+    public void showTime(Intent intent){
         String time = intent.getStringExtra("TIME");
         float percent = intent.getFloatExtra("PERCENT",0);
         String count = intent.getStringExtra("#location");
+        if (intent.getParcelableExtra("location")!=null){
+            mapManager.addLocation(intent.getParcelableExtra("location"));
+        }
         durationSpent.setText(time);
         progressView.setValue(percent);
         numberofLocations.setText(count);
     }
 
-    private ServiceConnection mConnection = new ServiceConnection(){
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            TrackerService.TimerBinder binder = (TrackerService.TimerBinder) service;
-            trackerService = binder.getService();
-        }
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-        }
-    };
 
-
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        TrackerService.TimerBinder binder = (TrackerService.TimerBinder) service;
+        trackerService = binder.getService();
+    }
 }
