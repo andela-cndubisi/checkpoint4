@@ -1,4 +1,4 @@
-package checkpoint.andela.com.productivitytracker.google.manager;
+package checkpoint.andela.com.productivitytracker.managers;
 
 import android.location.Geocoder;
 import android.location.Location;

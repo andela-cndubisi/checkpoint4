@@ -1,4 +1,4 @@
-package checkpoint.andela.com.productivitytracker.google.manager;
+package checkpoint.andela.com.productivitytracker.managers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,7 +27,6 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
         LocationListener {
 
     private Context content;
-    private LocationMangerDelegate mDelegate;
 
     private Location currentLocation;
     private int recordedLocations = 0;
@@ -43,10 +42,6 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-    }
-
-    public void setDelegate(LocationMangerDelegate delegate){
-        mDelegate = delegate;
     }
     @Override
     public void onConnected(Bundle bundle) {
@@ -129,11 +124,7 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
         long rowId = db.insert(ProductivityContract.LocationEntry.TABLE_NAME, null, values);
         if (rowId !=-1)
             recordedLocations++;
-        mDelegate.didSaveLocation(currentLocation);
         db.close();
     }
 
-    public interface LocationMangerDelegate{
-        void didSaveLocation(Location location);
-    }
 }

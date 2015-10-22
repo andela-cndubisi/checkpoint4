@@ -11,6 +11,7 @@ import org.robolectric.annotation.Config;
 
 import checkpoint.andela.com.productivitytracker.activities.MainActivity;
 import checkpoint.andela.com.productivitytracker.fragments.SettingsFragment;
+import checkpoint.andela.com.productivitytracker.lib.SeekArc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

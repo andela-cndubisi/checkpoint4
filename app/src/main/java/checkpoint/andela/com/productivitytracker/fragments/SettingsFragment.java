@@ -19,7 +19,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 import checkpoint.andela.com.productivitytracker.R;
-import checkpoint.andela.com.productivitytracker.SeekArc;
+import checkpoint.andela.com.productivitytracker.lib.SeekArc;
 
 /**
  * Created by andela-cj on 14/10/2015.
