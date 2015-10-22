@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_done"
-        android:title="@string/action_history"
+        android:title="@string/action_done"
         android:icon="@drawable/checkmark"
         app:showAsAction="always" />
 </menu>
