@@ -23,10 +23,7 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyC8zTaz6m4fkqcKT36htNEby9LXQ6JazuI" />
 
-        <activity android:name=".activities.LogActivity" android:parentActivityName=".activities.MainActivity">
-                    <meta-data android:name="android.support.PARENT_ACTIVITY"
-                        android:value="checkpoint.andela.com.productivitytracker.activities.MainActivity"/>
-            </activity>
+        <activity android:name=".activities.LogActivity"/>
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait" >
@@ -36,16 +33,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.TrackingActivity" >
+        <activity android:name=".activities.TrackingActivity" android:screenOrientation="portrait">
         </activity>
-
-        <provider
-            android:name=".data.ProductivityProvider"
-            android:authorities="checkpoint.andela.com.productivitytracker" />
-
         <service android:name=".TrackerService" />
 
-        <activity android:name=".activities.MapActivity" >
+        <activity android:name=".activities.MapActivity">
+        <meta-data android:name="android.support.PARENT_ACTIVITY"
+            android:value="checkpoint.andela.com.productivitytracker.activities.LogActivity"/>
+            >
         </activity>
     </application>
 
