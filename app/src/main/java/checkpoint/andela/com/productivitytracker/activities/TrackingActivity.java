@@ -4,23 +4,21 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.google.android.gms.maps.MapFragment;
 import checkpoint.andela.com.productivitytracker.managers.ServiceManager;
 import checkpoint.andela.com.productivitytracker.TrackerService;
 import checkpoint.andela.com.productivitytracker.R;
 import checkpoint.andela.com.productivitytracker.lib.circleprogress.CircleProgressView;
-import checkpoint.andela.com.productivitytracker.managers.GoogleMapManager;
-
 
 public class TrackingActivity extends AppCompatActivity implements ServiceManager.ServiceManagerDelegate{
     private TextView durationSpent;
@@ -33,27 +31,18 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
     private Intent trackerIntent;
     private TrackerService trackerService;
     ServiceManager serviceManager = new ServiceManager();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tracking_fragment);
         interval = getIntent().getIntExtra("Interval", interval);
-        Typeface faceLight= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Light.ttf");
-        Typeface faceMedium= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Medium.ttf");
-        durationSpent = (TextView)findViewById(R.id.duration);
-        pause = (ImageButton) findViewById(R.id.pause_button);
-        stopButton = (ImageButton)findViewById(R.id.stop_button);
-        playButton = (ImageButton)findViewById(R.id.play_button);
-        numberofLocations = (TextView) findViewById(R.id.number_of_locations);
-        ((TextView) (findViewById(R.id.location_count_label))).setTypeface(faceMedium);
-        durationSpent.setTypeface(faceLight);
-        numberofLocations.setTypeface(faceLight);
-        progressView = (CircleProgressView) findViewById(R.id.circleView);
+        setupUI();
+        setImageButtonOnClickListener();
+        setTextViewTypeFace();
         progressView.setSeekModeEnabled(false);
         progressView.setValue(0);
         serviceManager.setDelegate(this);
-
-        setImageButtonOnClickListener();
         if (savedInstanceState !=null){
             trackerIntent = savedInstanceState.getParcelable("intent");
             durationSpent.setText(savedInstanceState.getString("duration"));
@@ -62,20 +51,53 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
         }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable("intent",trackerIntent);
-        outState.putString("duration", durationSpent.getText().toString());
-        outState.putBoolean("paused", trackerService.isPaused());
-        super.onSaveInstanceState(outState);
+    private void setupUI(){
+        durationSpent = (TextView)findViewById(R.id.duration);
+        pause = (ImageButton) findViewById(R.id.pause_button);
+        stopButton = (ImageButton)findViewById(R.id.stop_button);
+        playButton = (ImageButton)findViewById(R.id.play_button);
+        numberofLocations = (TextView) findViewById(R.id.number_of_locations);
+        progressView = (CircleProgressView) findViewById(R.id.circleView);
+
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        trackerIntent = savedInstanceState.getParcelable("intent");
-        durationSpent.setText(savedInstanceState.getString("duration"));
-        super.onRestoreInstanceState(savedInstanceState);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_history, menu);
+        return super.onCreateOptionsMenu(menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_history) {
+            startHistory();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public void setTextViewTypeFace(){
+        Typeface faceLight= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Light.ttf");
+        Typeface faceMedium= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Medium.ttf");
+        ((TextView) (findViewById(R.id.location_count_label))).setTypeface(faceMedium);
+        durationSpent.setTypeface(faceLight);
+        numberofLocations.setTypeface(faceLight);
+    }
+
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        outState.putParcelable("intent",trackerIntent);
+//        outState.putString("duration", durationSpent.getText().toString());
+//        outState.putBoolean("paused", trackerService.isPaused());
+//        super.onSaveInstanceState(outState);
+//    }
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        trackerIntent = savedInstanceState.getParcelable("intent");
+//        durationSpent.setText(savedInstanceState.getString("duration"));
+//        super.onRestoreInstanceState(savedInstanceState);
+//    }
 
     @Override
     protected void onResume() {
@@ -138,9 +160,11 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
             }
 
             if (v.getId() == R.id.stop_button) {
+                trackerService.willStop();
                 stopService(trackerIntent);
                 TrackerService.isRunning = false;
                 startHistory();
+                finish();
             } else if (v.getId() == R.id.play_button) {
                 params.addRule(11, 0);
                 params2.addRule(9, 0);
@@ -153,10 +177,8 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
     };
 
     public void startHistory(){
-
         Intent a = new Intent(this, LogActivity.class);
         startActivity(a);
-        finish();
     }
 
     public void showTime(Intent intent){
@@ -165,7 +187,7 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
         String count = intent.getStringExtra("#location");
         durationSpent.setText(time);
         progressView.setValue(percent);
-        numberofLocations.setText(count);
+        if (count!=null) numberofLocations.setText(count);
     }
 
 
