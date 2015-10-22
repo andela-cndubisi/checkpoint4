@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 
 import checkpoint.andela.com.productivitytracker.R;
 import checkpoint.andela.com.productivitytracker.TrackerService;
+import checkpoint.andela.com.productivitytracker.activities.LogActivity;
 import checkpoint.andela.com.productivitytracker.activities.TrackingActivity;
 import static checkpoint.andela.com.productivitytracker.fragments.SettingsFragment.INTERVAL;
 
@@ -37,6 +41,7 @@ public class StartFragment  extends Fragment implements SettingsFragment.iSettin
         setting.setTypeface(face);
         startButton.setOnClickListener(onClickListener);
         setting.setOnClickListener(onClickListener);
+        setHasOptionsMenu(true);
         return v;
     }
 
@@ -55,6 +60,22 @@ public class StartFragment  extends Fragment implements SettingsFragment.iSettin
         }
 
     };
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_history, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_history){
+            Intent history = new Intent(getActivity(), LogActivity.class);
+            startActivity(history);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onStart() {
