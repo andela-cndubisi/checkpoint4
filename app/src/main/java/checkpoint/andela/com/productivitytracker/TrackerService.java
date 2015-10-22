@@ -87,12 +87,6 @@ public class TrackerService extends Service{
                 .setSmallIcon(R.drawable.clock)
                 .setContentTitle("Tracking...").build();
         notification.contentView = notificationView;
-        // notification.contentView.setTextViewText(R.id.timer_title, time);
-
-//        Intent clickIntent = new Intent("com.andela.click");
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 100, clickIntent, 0);
-//        notificationView.setOnClickPendingIntent(R.id.button, pendingIntent);
-
         notification.flags |= Notification.FLAG_ONGOING_EVENT;
         startForeground(2343232, notification);
     }

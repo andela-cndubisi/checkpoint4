@@ -132,7 +132,7 @@ public class ProductivityDBHelper extends SQLiteOpenHelper {
         ContentValues values = ProductivityContract.LocationEntry.createContentFromLocation(
                 currentLocation.getLongitude()
                 , currentLocation.getLatitude()
-                , address
+                , ((!address.isEmpty())? address:"Unknown")
                 , today, interval);
         long rowId = db.insert(ProductivityContract.LocationEntry.TABLE_NAME, null, values);
         return rowId;
