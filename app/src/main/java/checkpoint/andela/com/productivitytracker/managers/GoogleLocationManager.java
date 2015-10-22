@@ -70,7 +70,6 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
         float diff = currentLocation.distanceTo(location);
          if (diff >= 20){
              didChange = true;
-             saveLocation();
          }
     }
 
@@ -82,6 +81,11 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
     public boolean didChange() {
         return didChange;
     }
+
+    public void reset(){
+        didChange = false;
+    }
+
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
@@ -103,27 +107,22 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
     }
 
     public void saveLocation() {
-        SQLiteDatabase db = new ProductivityDBHelper(content)
-                .getWritableDatabase();
-
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        Date date = new Date();
-        String today = dateFormat.format(date);
-        Geocoder coder = new Geocoder(content, Locale.US);
+        ProductivityDBHelper dbHelper = new ProductivityDBHelper(content);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         String address = "";
-        try {
-             address = coder.getFromLocation(currentLocation.getLatitude(),currentLocation.getLongitude(),1).get(0).getAddressLine(0);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (currentLocation!= null) {
+            try {
+                Geocoder coder = new Geocoder(content, Locale.US);
+                address = coder.getFromLocation(currentLocation.getLatitude(),currentLocation.getLongitude(),1).get(0).getAddressLine(0);
+                long val = dbHelper.saveLocationAndAddress(currentLocation, address, interval);
+                if (val !=-1 ) {
+                    recordedLocations++;
+                    currentLocation = null;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        ContentValues values = ProductivityContract.LocationEntry.createContentFromLocation(
-                currentLocation.getLongitude()
-                , currentLocation.getLatitude()
-                , address
-                , today, interval);
-        long rowId = db.insert(ProductivityContract.LocationEntry.TABLE_NAME, null, values);
-        if (rowId !=-1)
-            recordedLocations++;
         db.close();
     }
 
