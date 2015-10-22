@@ -13,12 +13,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
-import checkpoint.andela.com.productivitytracker.google.manager.GoogleLocationManager;
+import checkpoint.andela.com.productivitytracker.managers.GoogleLocationManager;
 
 /**
  * Created by andela-cj on 19/10/2015.
  */
-public class TrackerService extends Service implements GoogleLocationManager.LocationMangerDelegate{
+public class TrackerService extends Service{
     private GoogleLocationManager locationManager;
     private int interval = 0;
     private long starttime = 0L;
@@ -41,7 +41,6 @@ public class TrackerService extends Service implements GoogleLocationManager.Loc
         handlerIntent = new Intent("com.andela.checkpoint");
         starttime = SystemClock.uptimeMillis();
         locationManager = new GoogleLocationManager(getApplicationContext());
-        locationManager.setDelegate(this);
         sendNotification();
     }
 
@@ -166,7 +165,5 @@ public class TrackerService extends Service implements GoogleLocationManager.Loc
     public void didSaveLocation(Location currentLocation) {
         handlerIntent.putExtra("location",currentLocation);
     }
-
-
 
 }
