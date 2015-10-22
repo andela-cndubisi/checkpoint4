@@ -1,8 +1,5 @@
 package checkpoint.andela.com.productivitytracker;
 
-import android.graphics.PointF;
-import android.support.annotation.Nullable;
-
 /**
  * Created by andela-cj on 21/10/2015.
  */
