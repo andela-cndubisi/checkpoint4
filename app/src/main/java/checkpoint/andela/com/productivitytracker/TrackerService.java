@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -23,6 +22,7 @@ public class TrackerService extends Service{
     private int interval = 0;
     private long starttime = 0L;
     private long timeInMilliseconds = 0L;
+    private float percent;
     private long oldSystemTime = 0L;
     private String time;
     private long presentTime = 0L;
@@ -121,7 +121,8 @@ public class TrackerService extends Service{
     private void sendToActivity() {
         timeInMilliseconds =  SystemClock.uptimeMillis() - presentTime - starttime;
         secs = (int) (timeInMilliseconds / 1000);
-        handlerIntent.putExtra("PERCENT", convertToPercentage(interval*60,secs));
+        percent = convertToPercentage(interval*60,secs);
+        handlerIntent.putExtra("PERCENT", percent);
         hr = mins / 60;
         mins = secs / 60;
         secs = secs % 60;
@@ -130,9 +131,12 @@ public class TrackerService extends Service{
 
         if (locationManager.didChange()){
             resetTimer();
-            locationManager.saveLocation();
+            if (percent >=100) {
+                locationManager.saveLocation();
+                handlerIntent.putExtra("#location", String.format("%d", locationManager.getRecordedLocations()));
+            }
+            locationManager.reset();
         }
-        handlerIntent.putExtra("#location", String.format("%d", locationManager.getRecordedLocations()));
         sendBroadcast(handlerIntent);
     }
 
@@ -156,14 +160,15 @@ public class TrackerService extends Service{
         presentTime = 0L;
     }
 
+    public void willStop() {
+        if (percent >= 100){
+            locationManager.saveLocation();
+        }
+    }
+
     public class TimerBinder extends Binder {
         public TrackerService getService() {
             return TrackerService.this;
         }
     }
-
-    public void didSaveLocation(Location currentLocation) {
-        handlerIntent.putExtra("location",currentLocation);
-    }
-
 }
