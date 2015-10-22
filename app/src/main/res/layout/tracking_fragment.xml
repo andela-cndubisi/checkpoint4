@@ -85,7 +85,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/progress_circle">
 
-        <checkpoint.andela.com.productivitytracker.circleprogress.CircleProgressView
+        <checkpoint.andela.com.productivitytracker.lib.circleprogress.CircleProgressView
             android:id="@+id/circleView"
             android:layout_width="2200dp"
             android:layout_height="220dp"
