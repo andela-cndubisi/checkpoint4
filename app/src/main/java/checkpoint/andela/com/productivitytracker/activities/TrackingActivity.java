@@ -8,19 +8,18 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.android.gms.maps.MapFragment;
-
 import checkpoint.andela.com.productivitytracker.managers.ServiceManager;
 import checkpoint.andela.com.productivitytracker.TrackerService;
 import checkpoint.andela.com.productivitytracker.R;
-import checkpoint.andela.com.productivitytracker.circleprogress.CircleProgressView;
-import checkpoint.andela.com.productivitytracker.google.manager.GoogleMapManager;
+import checkpoint.andela.com.productivitytracker.lib.circleprogress.CircleProgressView;
+import checkpoint.andela.com.productivitytracker.managers.GoogleMapManager;
 
 
 public class TrackingActivity extends AppCompatActivity implements ServiceManager.ServiceManagerDelegate{
@@ -33,7 +32,6 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
     private int interval = 0;
     private Intent trackerIntent;
     private TrackerService trackerService;
-    GoogleMapManager mapManager;
     ServiceManager serviceManager = new ServiceManager();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,17 +60,6 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
             if (savedInstanceState.getBoolean("paused"))
                 pause.performClick();
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (Configuration.ORIENTATION_LANDSCAPE == newConfig.orientation){
-            MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment);
-            if (mapFragment!= null){
-                mapManager = new GoogleMapManager(mapFragment);
-            }
-        }
-        super.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -174,11 +161,8 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
 
     public void showTime(Intent intent){
         String time = intent.getStringExtra("TIME");
-        float percent = intent.getFloatExtra("PERCENT",0);
+        float percent = intent.getFloatExtra("PERCENT", 0);
         String count = intent.getStringExtra("#location");
-        if (intent.getParcelableExtra("location")!=null){
-            mapManager.addLocation(intent.getParcelableExtra("location"));
-        }
         durationSpent.setText(time);
         progressView.setValue(percent);
         numberofLocations.setText(count);
