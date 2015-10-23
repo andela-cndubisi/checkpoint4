@@ -2,7 +2,6 @@
 package checkpoint.andela.com.productivitytracker.activities;
 
 import android.graphics.PointF;
-import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -14,9 +13,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import checkpoint.andela.com.productivitytracker.R;
 

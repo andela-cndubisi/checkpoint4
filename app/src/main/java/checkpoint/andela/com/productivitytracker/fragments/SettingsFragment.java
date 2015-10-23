@@ -19,6 +19,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 import checkpoint.andela.com.productivitytracker.R;
+import static checkpoint.andela.com.productivitytracker.activities.TrackingActivity.Constants.*;
 import checkpoint.andela.com.productivitytracker.lib.SeekArc;
 
 /**
@@ -32,7 +33,6 @@ public class SettingsFragment extends DialogFragment {
 
     private final int MAX = 60;
     private final int MIN = 5;
-    protected static final String INTERVAL = "INTERVAL";
     private int progress;
 
 
@@ -46,7 +46,7 @@ public class SettingsFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Typeface face= Typeface.createFromAsset(getActivity().getAssets(), "fonts/Gotham-Light.ttf");
+        Typeface face= Typeface.createFromAsset(getActivity().getAssets(), getResources().getString(R.string.gothom_Light));
         View v = inflater.inflate(R.layout.interval_setting_fragment, null);
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         seekBar = (SeekArc) v.findViewById(R.id.seekArc);

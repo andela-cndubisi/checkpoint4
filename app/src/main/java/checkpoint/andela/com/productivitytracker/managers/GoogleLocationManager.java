@@ -68,7 +68,7 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
             return;
         }
         float diff = currentLocation.distanceTo(location);
-         if (diff >= 20){
+         if (diff >= 50){
              didChange = true;
          }
     }
@@ -118,6 +118,8 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
                 if (val !=-1 ) {
                     recordedLocations++;
                     currentLocation = null;
+                    once = false;
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();

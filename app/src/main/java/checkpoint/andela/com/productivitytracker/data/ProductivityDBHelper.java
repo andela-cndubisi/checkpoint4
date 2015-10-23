@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 
 import checkpoint.andela.com.productivitytracker.DateCount;
 
@@ -98,6 +97,7 @@ public class ProductivityDBHelper extends SQLiteOpenHelper {
                 int sumIdx = cursor.getColumnIndex(COLUMN_SELECTION);
                 int cityIdx = cursor.getColumnIndex(LocationEntry.COLUMN_CITY_NAME);
                 int countIdx = cursor.getColumnIndex(newColumnName);
+                int count = cursor.getInt(countIdx);
                 DateCount history = new DateCount(cursor.getString(cityIdx),cursor.getInt(countIdx),cursor.getLong(sumIdx));
                 list.add(history);
             }

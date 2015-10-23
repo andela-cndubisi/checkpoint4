@@ -1,6 +1,5 @@
 package checkpoint.andela.com.productivitytracker.activities;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -18,9 +17,11 @@ import checkpoint.andela.com.productivitytracker.fragments.HistoryFragment;
  * Created by andela-cj on 21/10/2015.
  */
 public class LogActivity extends AppCompatActivity{
+    private final String TITLE = "History";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(TITLE);
         setContentView(R.layout.history_tab);
         HistoryPagerAdapter adapter = new HistoryPagerAdapter(getSupportFragmentManager());
         ViewPager viewPager = (ViewPager)findViewById(R.id.viewpager);
@@ -43,6 +44,9 @@ public class LogActivity extends AppCompatActivity{
     }
     static class HistoryPagerAdapter extends FragmentStatePagerAdapter {
 
+        private final String TAB1 = "By date";
+        private final String TAB2 = "By by location";
+
         public HistoryPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -55,7 +59,7 @@ public class LogActivity extends AppCompatActivity{
                 case 1:
                     HistoryFragment history = new HistoryFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean("address", true);
+                    bundle.putBoolean(TrackingActivity.Constants.ADDRESS, true);
                     history.setArguments(bundle);
                     return history;
             }
@@ -69,11 +73,12 @@ public class LogActivity extends AppCompatActivity{
 
         @Override
         public CharSequence getPageTitle(int position) {
+
             switch (position) {
                 case 0:
-                    return "History by date";
+                    return TAB1;
                 case 1:
-                    return "History by location";
+                    return TAB2;
             }
             return null;
         }

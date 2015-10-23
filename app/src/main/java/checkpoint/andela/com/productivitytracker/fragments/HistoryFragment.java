@@ -1,7 +1,5 @@
 package checkpoint.andela.com.productivitytracker.fragments;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,8 +14,7 @@ import java.util.List;
 import checkpoint.andela.com.productivitytracker.DateCount;
 import checkpoint.andela.com.productivitytracker.R;
 import checkpoint.andela.com.productivitytracker.RVAdapter;
-import checkpoint.andela.com.productivitytracker.activities.MapActivity;
-import checkpoint.andela.com.productivitytracker.data.ProductivityContract;
+import checkpoint.andela.com.productivitytracker.activities.TrackingActivity;
 import checkpoint.andela.com.productivitytracker.data.ProductivityDBHelper;
 
 /**
@@ -35,10 +32,9 @@ public class HistoryFragment extends Fragment {
         rv =  (RecyclerView)view.findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
-        insertDummyData();
         if (getArguments()!= null) {
             bundle = getArguments();
-            address= bundle.getBoolean("address");
+            address= bundle.getBoolean(TrackingActivity.Constants.ADDRESS);
         }
         if (address) populateData(address);
         else  populateData(address);
@@ -55,19 +51,5 @@ public class HistoryFragment extends Fragment {
             records = dbHelper.getDateWithCount();
         }
     }
-
-    public void insertDummyData(){
-        ProductivityDBHelper dbHelper =  new ProductivityDBHelper(getActivity());
-        SQLiteDatabase db1 = dbHelper.getWritableDatabase();
-        ContentValues vl = new ContentValues();
-        vl.put(ProductivityContract.LocationEntry.COLUMN_DATE_TEXT,"2015-08-09");
-        vl.put(ProductivityContract.LocationEntry.COLUMN_CITY_NAME,"Yaba, Lagos");
-        vl.put(ProductivityContract.LocationEntry.COLUMN_LONGITUDE,3.380699);
-        vl.put(ProductivityContract.LocationEntry.COLUMN_LATITUDE, 6.518296);
-        vl.put(ProductivityContract.LocationEntry.COLUMN_INTERVAL, 300000);
-        long count = db1.insert(ProductivityContract.LocationEntry.TABLE_NAME, null, vl);
-        db1.close();
-    }
-
 
 }

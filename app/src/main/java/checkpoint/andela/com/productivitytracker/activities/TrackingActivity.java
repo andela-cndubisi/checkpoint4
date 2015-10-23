@@ -36,7 +36,7 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tracking_fragment);
-        interval = getIntent().getIntExtra("Interval", interval);
+        interval = getIntent().getIntExtra(Constants.INTERVAL, interval);
         setupUI();
         setImageButtonOnClickListener();
         setTextViewTypeFace();
@@ -44,9 +44,9 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
         progressView.setValue(0);
         serviceManager.setDelegate(this);
         if (savedInstanceState !=null){
-            trackerIntent = savedInstanceState.getParcelable("intent");
-            durationSpent.setText(savedInstanceState.getString("duration"));
-            if (savedInstanceState.getBoolean("paused"))
+            trackerIntent = savedInstanceState.getParcelable(Constants.PAUSED);
+            durationSpent.setText(savedInstanceState.getString(Constants.DURATION));
+            if (savedInstanceState.getBoolean(Constants.PAUSED))
                 pause.performClick();
         }
     }
@@ -78,31 +78,31 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
 
 
     public void setTextViewTypeFace(){
-        Typeface faceLight= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Light.ttf");
-        Typeface faceMedium= Typeface.createFromAsset(getAssets(), "fonts/Gotham-Medium.ttf");
+        Typeface faceLight= Typeface.createFromAsset(getAssets(), getResources().getString(R.string.gothom_Light));
+        Typeface faceMedium= Typeface.createFromAsset(getAssets(), getResources().getString(R.string.gothom_Medium));
         ((TextView) (findViewById(R.id.location_count_label))).setTypeface(faceMedium);
         durationSpent.setTypeface(faceLight);
         numberofLocations.setTypeface(faceLight);
     }
 
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        outState.putParcelable("intent",trackerIntent);
-//        outState.putString("duration", durationSpent.getText().toString());
-//        outState.putBoolean("paused", trackerService.isPaused());
-//        super.onSaveInstanceState(outState);
-//    }
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        trackerIntent = savedInstanceState.getParcelable("intent");
-//        durationSpent.setText(savedInstanceState.getString("duration"));
-//        super.onRestoreInstanceState(savedInstanceState);
-//    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(Constants.INTENT,trackerIntent);
+        outState.putString(Constants.DURATION, durationSpent.getText().toString());
+        outState.putBoolean(Constants.PAUSED, trackerService.isPaused());
+        super.onSaveInstanceState(outState);
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        trackerIntent = savedInstanceState.getParcelable(Constants.INTENT);
+        durationSpent.setText(savedInstanceState.getString(Constants.DURATION));
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 
     @Override
     protected void onResume() {
         bindService(trackerIntent, serviceManager.getServiceConnection(), Context.BIND_AUTO_CREATE);
-        registerReceiver(serviceManager.getBroadCastReceiver(), new IntentFilter("com.andela.checkpoint"));
+        registerReceiver(serviceManager.getBroadCastReceiver(), new IntentFilter(Constants.SERVICE_KEY));
         super.onResume();
     }
 
@@ -124,7 +124,7 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
         if (trackerIntent == null){
             trackerIntent = new Intent(this, TrackerService.class);
             bindService(trackerIntent, serviceManager.getServiceConnection(), Context.BIND_AUTO_CREATE);
-            trackerIntent.putExtra("Interval", interval);
+            trackerIntent.putExtra(Constants.INTERVAL, interval);
             TrackerService.isRunning = true;
             startService(trackerIntent);
         }
@@ -182,9 +182,9 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
     }
 
     public void showTime(Intent intent){
-        String time = intent.getStringExtra("TIME");
-        float percent = intent.getFloatExtra("PERCENT", 0);
-        String count = intent.getStringExtra("#location");
+        String time = intent.getStringExtra(Constants.TIME);
+        float percent = intent.getFloatExtra(Constants.PERCENT, 0);
+        String count = intent.getStringExtra(Constants.N0_LOCATION);
         durationSpent.setText(time);
         progressView.setValue(percent);
         if (count!=null) numberofLocations.setText(count);
@@ -194,5 +194,19 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
     public void onServiceConnected(ComponentName name, IBinder service) {
         TrackerService.TimerBinder binder = (TrackerService.TimerBinder) service;
         trackerService = binder.getService();
+    }
+
+
+
+    public static class Constants {
+        public static final String TIME = "TIME";
+        public static final String PERCENT = "PERCENT";
+        public static final String INTERVAL = "INTERVAL";
+        public static final String N0_LOCATION = "#LOCATION";
+        public static final String SERVICE_KEY = "com.andela.checkpoint";
+        public static final String ADDRESS = "ADDRESS";
+        private static final String INTENT = "INTENT";
+        private static final String DURATION = "DURATION";
+        private static final String PAUSED = "PAUSED";
     }
 }
