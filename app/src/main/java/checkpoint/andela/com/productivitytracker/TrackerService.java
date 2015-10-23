@@ -13,7 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
 import checkpoint.andela.com.productivitytracker.managers.GoogleLocationManager;
-
+import static checkpoint.andela.com.productivitytracker.activities.TrackingActivity.Constants;
 /**
  * Created by andela-cj on 19/10/2015.
  */
@@ -38,7 +38,7 @@ public class TrackerService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
-        handlerIntent = new Intent("com.andela.checkpoint");
+        handlerIntent = new Intent(Constants.SERVICE_KEY);
         starttime = SystemClock.uptimeMillis();
         locationManager = new GoogleLocationManager(getApplicationContext());
         sendNotification();
@@ -72,7 +72,7 @@ public class TrackerService extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null)
-            interval = intent.getIntExtra("Interval", 0);
+            interval = intent.getIntExtra(Constants.INTERVAL, 0);
             locationManager.setInterval(interval);
             locationManager.connect();
         return super.onStartCommand(intent, flags, startId);
@@ -85,7 +85,7 @@ public class TrackerService extends Service{
         RemoteViews notificationView = new RemoteViews(getApplicationContext().getPackageName(), R.layout.notification);
         Notification notification = new NotificationCompat.Builder(getApplicationContext())
                 .setSmallIcon(R.drawable.clock)
-                .setContentTitle("Tracking...").build();
+                .setContentTitle(getResources().getString(R.string.tracking)).build();
         notification.contentView = notificationView;
         notification.flags |= Notification.FLAG_ONGOING_EVENT;
         startForeground(2343232, notification);
@@ -116,18 +116,18 @@ public class TrackerService extends Service{
         timeInMilliseconds =  SystemClock.uptimeMillis() - presentTime - starttime;
         secs = (int) (timeInMilliseconds / 1000);
         percent = convertToPercentage(interval*60,secs);
-        handlerIntent.putExtra("PERCENT", percent);
+        handlerIntent.putExtra(Constants.PERCENT, percent);
         hr = mins / 60;
         mins = secs / 60;
         secs = secs % 60;
         time = String.format("%02d:%02d:%02d", hr, mins, secs);
-        handlerIntent.putExtra("TIME", time);
+        handlerIntent.putExtra(Constants.TIME, time);
 
         if (locationManager.didChange()){
             resetTimer();
-            if (percent >=100) {
+            if (percent >=50) {
                 locationManager.saveLocation();
-                handlerIntent.putExtra("#location", String.format("%d", locationManager.getRecordedLocations()));
+                handlerIntent.putExtra(Constants.N0_LOCATION, String.format("%d", locationManager.getRecordedLocations()));
             }
             locationManager.reset();
         }
