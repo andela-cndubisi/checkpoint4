@@ -114,15 +114,16 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
             try {
                 Geocoder coder = new Geocoder(content, Locale.US);
                 address = coder.getFromLocation(currentLocation.getLatitude(),currentLocation.getLongitude(),1).get(0).getAddressLine(0);
-                long val = dbHelper.saveLocationAndAddress(currentLocation, address, interval);
-                if (val !=-1 ) {
-                    recordedLocations++;
-                    currentLocation = null;
-                    once = false;
 
-                }
             } catch (IOException e) {
+                address = "unknown";
                 e.printStackTrace();
+            }
+            long val = dbHelper.saveLocationAndAddress(currentLocation, address, interval);
+            if (val != -1 ) {
+                recordedLocations++;
+                currentLocation = null;
+                once = false;
             }
         }
         db.close();
