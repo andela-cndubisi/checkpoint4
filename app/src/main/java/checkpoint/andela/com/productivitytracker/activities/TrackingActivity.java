@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -27,7 +26,6 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
     private ImageButton stopButton;
     private ImageButton playButton;
     private CircleProgressView progressView;
-
     private int interval = 0;
     private Intent trackerIntent;
     private TrackerService trackerService;
@@ -46,13 +44,14 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
         serviceManager.setDelegate(this);
         if (savedInstanceState !=null){
             trackerIntent = savedInstanceState.getParcelable(Constants.PAUSED);
-            hours.setText(savedInstanceState.getString("Hour"));
-            minutes.setText(savedInstanceState.getString("Minutes"));
-            seconds.setText(savedInstanceState.getString("Seconds"));
+            hours.setText(savedInstanceState.getString(Constants.HOUR));
+            minutes.setText(savedInstanceState.getString(Constants.MINUTES));
+            seconds.setText(savedInstanceState.getString(Constants.SECONDS));
             if (savedInstanceState.getBoolean(Constants.PAUSED))
                 pause.performClick();
         }
     }
+
 
     private void setupUI(){
         pause = (ImageButton) findViewById(R.id.pause_button);
@@ -95,16 +94,15 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(Constants.INTENT, trackerIntent);
-        outState.putString("Hour", hours.getText().toString());
-        outState.putString("Minutes", minutes.getText().toString());
-        outState.putString("Seconds", seconds.getText().toString());
+        outState.putString(Constants.HOUR, hours.getText().toString());
+        outState.putString(Constants.MINUTES, minutes.getText().toString());
+        outState.putString(Constants.SECONDS, seconds.getText().toString());
         outState.putBoolean(Constants.PAUSED, trackerService.isPaused());
         super.onSaveInstanceState(outState);
     }
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         trackerIntent = savedInstanceState.getParcelable(Constants.INTENT);
-//        durationSpent.setText(savedInstanceState.getString(Constants.DURATION));
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -140,12 +138,12 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
     }
 
     private void setImageButtonOnClickListener(){
-        stopButton.setOnClickListener(onClickListener);
-        pause.setOnClickListener(onClickListener);
-        playButton.setOnClickListener(onClickListener);
+        stopButton.setOnClickListener(controlListener);
+        pause.setOnClickListener(controlListener);
+        playButton.setOnClickListener(controlListener);
     }
 
-    View.OnClickListener onClickListener = new View.OnClickListener() {
+    View.OnClickListener controlListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
@@ -195,8 +193,8 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
         float percent = intent.getFloatExtra(Constants.PERCENT, 0);
         String count = intent.getStringExtra(Constants.N0_LOCATION);
         String [] timer = time.split(":");
-        hours.setText(timer[0]+" :");
-        minutes.setText(timer[1]+" :");
+        hours.setText(timer[0]+":");
+        minutes.setText(timer[1]+":");
         seconds.setText(timer[2]);
         progressView.setValue(percent);
         if (count!=null) numberofLocations.setText(count);
@@ -218,7 +216,9 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
         public static final String SERVICE_KEY = "com.andela.checkpoint";
         public static final String ADDRESS = "ADDRESS";
         private static final String INTENT = "INTENT";
-        private static final String DURATION = "DURATION";
         private static final String PAUSED = "PAUSED";
+        private static final String HOUR = "HOUR";
+        private static final String MINUTES = "MINUTE";
+        private static final String SECONDS = "SECOND";
     }
 }
