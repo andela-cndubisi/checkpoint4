@@ -61,7 +61,7 @@
                 android:layout_below="@+id/default_value"
                 android:textColor="@android:color/white"
                 android:gravity="center"
-                android:id="@+id/minutes"
+                android:id="@+id/description"
                 android:text="@string/minutes"
                 android:textSize="15sp"
                 android:layout_centerHorizontal="true" />
