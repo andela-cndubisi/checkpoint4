@@ -21,12 +21,13 @@ import checkpoint.andela.com.productivitytracker.R;
 import checkpoint.andela.com.productivitytracker.lib.circleprogress.CircleProgressView;
 
 public class TrackingActivity extends AppCompatActivity implements ServiceManager.ServiceManagerDelegate{
-    private TextView durationSpent;
     private ImageButton pause;
     private TextView numberofLocations;
+    private TextView hours, minutes, seconds;
     private ImageButton stopButton;
     private ImageButton playButton;
     private CircleProgressView progressView;
+
     private int interval = 0;
     private Intent trackerIntent;
     private TrackerService trackerService;
@@ -45,20 +46,23 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
         serviceManager.setDelegate(this);
         if (savedInstanceState !=null){
             trackerIntent = savedInstanceState.getParcelable(Constants.PAUSED);
-            durationSpent.setText(savedInstanceState.getString(Constants.DURATION));
+            hours.setText(savedInstanceState.getString("Hour"));
+            minutes.setText(savedInstanceState.getString("Minutes"));
+            seconds.setText(savedInstanceState.getString("Seconds"));
             if (savedInstanceState.getBoolean(Constants.PAUSED))
                 pause.performClick();
         }
     }
 
     private void setupUI(){
-        durationSpent = (TextView)findViewById(R.id.duration);
         pause = (ImageButton) findViewById(R.id.pause_button);
         stopButton = (ImageButton)findViewById(R.id.stop_button);
         playButton = (ImageButton)findViewById(R.id.play_button);
         numberofLocations = (TextView) findViewById(R.id.number_of_locations);
         progressView = (CircleProgressView) findViewById(R.id.circleView);
-
+        hours = (TextView) findViewById(R.id.hour);
+        minutes = (TextView) findViewById(R.id.minute);
+        seconds = (TextView) findViewById(R.id.seconds);
     }
 
     @Override
@@ -81,21 +85,26 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
         Typeface faceLight= Typeface.createFromAsset(getAssets(), getResources().getString(R.string.gothom_Light));
         Typeface faceMedium= Typeface.createFromAsset(getAssets(), getResources().getString(R.string.gothom_Medium));
         ((TextView) (findViewById(R.id.location_count_label))).setTypeface(faceMedium);
-        durationSpent.setTypeface(faceLight);
+        hours.setTypeface(faceLight);
+        minutes.setTypeface(faceLight);
+        seconds.setTypeface(faceLight);
+
         numberofLocations.setTypeface(faceLight);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(Constants.INTENT,trackerIntent);
-        outState.putString(Constants.DURATION, durationSpent.getText().toString());
+        outState.putParcelable(Constants.INTENT, trackerIntent);
+        outState.putString("Hour", hours.getText().toString());
+        outState.putString("Minutes", minutes.getText().toString());
+        outState.putString("Seconds", seconds.getText().toString());
         outState.putBoolean(Constants.PAUSED, trackerService.isPaused());
         super.onSaveInstanceState(outState);
     }
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         trackerIntent = savedInstanceState.getParcelable(Constants.INTENT);
-        durationSpent.setText(savedInstanceState.getString(Constants.DURATION));
+//        durationSpent.setText(savedInstanceState.getString(Constants.DURATION));
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -185,7 +194,10 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
         String time = intent.getStringExtra(Constants.TIME);
         float percent = intent.getFloatExtra(Constants.PERCENT, 0);
         String count = intent.getStringExtra(Constants.N0_LOCATION);
-        durationSpent.setText(time);
+        String [] timer = time.split(":");
+        hours.setText(timer[0]+" :");
+        minutes.setText(timer[1]+" :");
+        seconds.setText(timer[2]);
         progressView.setValue(percent);
         if (count!=null) numberofLocations.setText(count);
     }
