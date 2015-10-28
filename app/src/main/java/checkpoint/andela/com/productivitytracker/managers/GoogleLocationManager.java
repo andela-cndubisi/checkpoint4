@@ -1,6 +1,5 @@
 package checkpoint.andela.com.productivitytracker.managers;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Geocoder;
@@ -14,22 +13,19 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.Locale;
 
-import checkpoint.andela.com.productivitytracker.data.ProductivityContract;
 import checkpoint.andela.com.productivitytracker.data.ProductivityDBHelper;
 
 public class GoogleLocationManager implements GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
+    private ArrayList<Location> savedLocations = new ArrayList<>();
     private Context content;
-
     private Location currentLocation;
-    private int recordedLocations = 0;
+    private int recordsCount = 0;
     private boolean once = false;
     boolean didChange = false;
     private GoogleApiClient mGoogleClient;
@@ -91,8 +87,8 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
-    public int getRecordedLocations(){
-        return recordedLocations;
+    public int getRecordsCount(){
+        return recordsCount;
     }
 
     public void disconnect(){
@@ -122,12 +118,16 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
             }
             long val = dbHelper.saveLocationAndAddress(currentLocation, address, interval);
             if (val != -1 ) {
-                recordedLocations++;
+                recordsCount++;
+                savedLocations.add(currentLocation);
             }
         }
         db.close();
     }
 
+    public ArrayList getSavedLocations(){
+        return savedLocations;
+    }
     public boolean isRecorded (){
         return recorded;
     }

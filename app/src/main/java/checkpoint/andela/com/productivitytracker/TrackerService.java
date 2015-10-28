@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -11,6 +12,8 @@ import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
+
+import java.util.ArrayList;
 
 import checkpoint.andela.com.productivitytracker.managers.GoogleLocationManager;
 import static checkpoint.andela.com.productivitytracker.activities.TrackingActivity.Constants;
@@ -139,9 +142,12 @@ public class TrackerService extends Service{
 
     }
 
+    public ArrayList<Location> savedLocations(){
+        return locationManager.getSavedLocations();
+    }
     public void recordLocation(){
         locationManager.saveLocation();
-        handlerIntent.putExtra(Constants.N0_LOCATION, String.format("%d", locationManager.getRecordedLocations()));
+        handlerIntent.putExtra(Constants.N0_LOCATION, String.format("%d", locationManager.getRecordsCount()));
     }
 
     public void resumeTimer() {
