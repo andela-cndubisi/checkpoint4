@@ -53,8 +53,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.HistoryViewHolder>
         holder.date.setText(lItem.date);
         holder.positions.setText(lItem.position);
         if(lItem.timespent != 0){
-            holder.timespent.setText(String.format("%d minutes",lItem.timespent));
-            holder.positions.setText("");
+            holder.positions.setText(String.format("%d minutes",lItem.timespent));
         }
     }
 
