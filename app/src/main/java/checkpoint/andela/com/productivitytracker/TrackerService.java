@@ -73,6 +73,7 @@ public class TrackerService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null)
             interval = intent.getIntExtra(Constants.INTERVAL, 0);
+            interval = 1;
             locationManager.setInterval(interval);
             locationManager.connect();
         return super.onStartCommand(intent, flags, startId);
@@ -122,16 +123,25 @@ public class TrackerService extends Service{
         secs = secs % 60;
         time = String.format("%02d:%02d:%02d", hr, mins, secs);
         handlerIntent.putExtra(Constants.TIME, time);
+        verifyLocationState(locationManager.didChange());
+        sendBroadcast(handlerIntent);
+    }
 
-        if (locationManager.didChange()){
+    private void verifyLocationState(boolean didChange) {
+        if (didChange){
             resetTimer();
-            if (percent >=50) {
-                locationManager.saveLocation();
-                handlerIntent.putExtra(Constants.N0_LOCATION, String.format("%d", locationManager.getRecordedLocations()));
-            }
             locationManager.reset();
         }
-        sendBroadcast(handlerIntent);
+        if (percent >=100 && !locationManager.isRecorded()) {
+            recordLocation();
+            locationManager.updateWithChange(didChange);
+        }
+
+    }
+
+    public void recordLocation(){
+        locationManager.saveLocation();
+        handlerIntent.putExtra(Constants.N0_LOCATION, String.format("%d", locationManager.getRecordedLocations()));
     }
 
     public void resumeTimer() {

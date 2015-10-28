@@ -34,6 +34,7 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
     boolean didChange = false;
     private GoogleApiClient mGoogleClient;
     private int interval = 0;
+    private boolean recorded = false;
 
     public GoogleLocationManager(Context applicationContext) {
         this.content = applicationContext;
@@ -62,7 +63,7 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        if (!isSetOnce()){
+        if (!isSetOnce() && !isRecorded()){
             currentLocation = location;
             once = true;
             return;
@@ -122,11 +123,21 @@ public class GoogleLocationManager implements GoogleApiClient.ConnectionCallback
             long val = dbHelper.saveLocationAndAddress(currentLocation, address, interval);
             if (val != -1 ) {
                 recordedLocations++;
-                currentLocation = null;
-                once = false;
             }
         }
         db.close();
     }
 
+    public boolean isRecorded (){
+        return recorded;
+    }
+    public void updateWithChange(boolean didChange) {
+        if (didChange){
+            currentLocation = null;
+            once = false;
+            recorded = false;
+        }else {
+            recorded = true;
+        }
+    }
 }
