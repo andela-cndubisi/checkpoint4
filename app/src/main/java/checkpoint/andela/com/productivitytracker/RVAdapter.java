@@ -11,9 +11,15 @@ import android.widget.TextView;
 import java.util.List;
 
 import checkpoint.andela.com.productivitytracker.activities.MapActivity;
-import checkpoint.andela.com.productivitytracker.data.ProductivityDBHelper;
+import checkpoint.andela.com.productivitytracker.db.ProductivityDBHelper;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.HistoryViewHolder>{
+
+    List<LocationItem> item;
+
+    public RVAdapter(List<LocationItem> item){
+        this.item = item;
+    }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -43,10 +49,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.HistoryViewHolder>
     };
 
     public void onBindViewHolder(HistoryViewHolder holder, int position) {
-        holder.date.setText(item.get(position).date);
-        holder.positions.setText(item.get(position).position);
-        if(item.get(position).timespent != 0){
-            holder.timespent.setText(String.format("%d minutes",item.get(position).timespent));
+        LocationItem lItem = item.get(position);
+        holder.date.setText(lItem.date);
+        holder.positions.setText(lItem.position);
+        if(lItem.timespent != 0){
+            holder.timespent.setText(String.format("%d minutes",lItem.timespent));
+            holder.positions.setText("");
         }
     }
 
@@ -70,12 +78,4 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.HistoryViewHolder>
             timespent = (TextView)itemView.findViewById(R.id.time_spent);
         }
     }
-
-    List<DateCount> item;
-
-    public RVAdapter(List<DateCount> item){
-        this.item = item;
-    }
-
-
 }

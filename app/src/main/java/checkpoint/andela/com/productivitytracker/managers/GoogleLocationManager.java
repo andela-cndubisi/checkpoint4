@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import checkpoint.andela.com.productivitytracker.data.ProductivityDBHelper;
+import checkpoint.andela.com.productivitytracker.db.ProductivityDBHelper;
 
 public class GoogleLocationManager implements GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener,

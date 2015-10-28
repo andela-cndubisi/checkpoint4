@@ -2,7 +2,6 @@ package checkpoint.andela.com.productivitytracker;
 
 import android.app.Notification;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Binder;
@@ -37,6 +36,7 @@ public class TrackerService extends Service{
     private Intent handlerIntent;
     public static boolean isRunning = false ;
     private boolean pause =false;
+    private final int FOREGROUND_ID =  2343232;
 
     @Override
     public void onCreate() {
@@ -76,7 +76,6 @@ public class TrackerService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null)
             interval = intent.getIntExtra(Constants.INTERVAL, 0);
-            interval = 1;
             locationManager.setInterval(interval);
             locationManager.connect();
         return super.onStartCommand(intent, flags, startId);
@@ -85,14 +84,13 @@ public class TrackerService extends Service{
 
     private void sendNotification() {
 
-        String notificationService = Context.NOTIFICATION_SERVICE;
         RemoteViews notificationView = new RemoteViews(getApplicationContext().getPackageName(), R.layout.notification);
         Notification notification = new NotificationCompat.Builder(getApplicationContext())
                 .setSmallIcon(R.drawable.clock)
                 .setContentTitle(getResources().getString(R.string.tracking)).build();
         notification.contentView = notificationView;
         notification.flags |= Notification.FLAG_ONGOING_EVENT;
-        startForeground(2343232, notification);
+        startForeground(FOREGROUND_ID, notification);
     }
 
     private float convertToPercentage(int interval, int value){
@@ -117,13 +115,14 @@ public class TrackerService extends Service{
     }
 
     private void sendToActivity() {
+        final int min2sec = 60;
         timeInMilliseconds =  SystemClock.uptimeMillis() - presentTime - starttime;
         secs = (int) (timeInMilliseconds / 1000);
-        percent = convertToPercentage(interval*60,secs);
+        percent = convertToPercentage(interval*min2sec,secs);
         handlerIntent.putExtra(Constants.PERCENT, percent);
-        hr = mins / 60;
-        mins = secs / 60;
-        secs = secs % 60;
+        hr = mins / min2sec;
+        mins = secs / min2sec;
+        secs = secs % min2sec;
         time = String.format("%02d:%02d:%02d", hr, mins, secs);
         handlerIntent.putExtra(Constants.TIME, time);
         verifyLocationState(locationManager.didChange());

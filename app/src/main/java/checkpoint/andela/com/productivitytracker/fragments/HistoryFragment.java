@@ -11,18 +11,18 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import checkpoint.andela.com.productivitytracker.DateCount;
+import checkpoint.andela.com.productivitytracker.LocationItem;
 import checkpoint.andela.com.productivitytracker.R;
 import checkpoint.andela.com.productivitytracker.RVAdapter;
 import checkpoint.andela.com.productivitytracker.activities.TrackingActivity;
-import checkpoint.andela.com.productivitytracker.data.ProductivityDBHelper;
+import checkpoint.andela.com.productivitytracker.db.ProductivityDBHelper;
 
 /**
  * Created by tunde on 10/20/15.
  */
 public class HistoryFragment extends Fragment {
     RecyclerView rv ;
-    private List<DateCount> records = new ArrayList<>();
+    private List<LocationItem> records = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
