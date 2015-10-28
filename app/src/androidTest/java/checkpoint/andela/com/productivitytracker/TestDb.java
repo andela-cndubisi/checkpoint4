@@ -9,8 +9,8 @@ import android.util.Log;
 import java.util.Map;
 import java.util.Set;
 
-import static checkpoint.andela.com.productivitytracker.data.ProductivityContract.LocationEntry;
-import checkpoint.andela.com.productivitytracker.data.ProductivityDBHelper;
+import static checkpoint.andela.com.productivitytracker.db.ProductivityContract.LocationEntry;
+import checkpoint.andela.com.productivitytracker.db.ProductivityDBHelper;
 
 /**
  * Created by andela-cj on 18/10/2015.
