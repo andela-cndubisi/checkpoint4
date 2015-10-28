@@ -79,7 +79,7 @@ public class StartFragment  extends Fragment implements SettingsFragment.iSettin
     private void start() {
         Intent a = new Intent(getActivity(), TrackingActivity.class);
         a.putExtra(INTERVAL, interval);
-        getActivity().finish();
+        getActivity();
         startActivity(a);
     }
 
