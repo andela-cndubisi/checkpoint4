@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import checkpoint.andela.com.productivitytracker.fragments.RecordsFragment;
 import checkpoint.andela.com.productivitytracker.managers.ServiceManager;
 import checkpoint.andela.com.productivitytracker.TrackerService;
 import checkpoint.andela.com.productivitytracker.R;
@@ -25,6 +29,7 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
     private ImageButton pause;
     private TextView numberofLocations;
     private TextView hours, minutes, seconds;
+    RelativeLayout locationCounter;
     private ImageButton stopButton;
     private ImageButton playButton;
     private CircleProgressView progressView;
@@ -44,6 +49,7 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
         progressView.setSeekModeEnabled(false);
         progressView.setValue(0);
         serviceManager.setDelegate(this);
+
         if (savedInstanceState !=null){
             trackerIntent = savedInstanceState.getParcelable(Constants.PAUSED);
             hours.setText(savedInstanceState.getString(Constants.HOUR));
@@ -64,6 +70,20 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
         hours = (TextView) findViewById(R.id.hour);
         minutes = (TextView) findViewById(R.id.minute);
         seconds = (TextView) findViewById(R.id.seconds);
+        locationCounter = (RelativeLayout) findViewById(R.id.location_counter);
+        locationCounter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<Location> records = trackerService.savedLocations();
+                if (records.size() > 0) {
+                    RecordsFragment recordsFragment = new RecordsFragment();
+                    recordsFragment.setLocations(records);
+                    recordsFragment.show(getFragmentManager(), "My Records Dialog");
+                }else {
+                    Toast.makeText(v.getContext(),"No Location to Display", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override
