@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import checkpoint.andela.com.productivitytracker.managers.ServiceManager;
 import checkpoint.andela.com.productivitytracker.TrackerService;
 import checkpoint.andela.com.productivitytracker.R;
@@ -171,6 +173,7 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
                 stopService(trackerIntent);
                 TrackerService.isRunning = false;
                 startHistory();
+
                 finish();
             } else if (v.getId() == R.id.play_button) {
                 params.addRule(11, 0);
@@ -207,6 +210,10 @@ public class TrackingActivity extends AppCompatActivity implements ServiceManage
     }
 
 
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this,"Cannot go back while tracking",Toast.LENGTH_LONG).show();
+    }
 
     public static class Constants {
         public static final String TIME = "TIME";
