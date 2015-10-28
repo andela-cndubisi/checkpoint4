@@ -15,7 +15,6 @@ import checkpoint.andela.com.productivitytracker.data.ProductivityDBHelper;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.HistoryViewHolder>{
 
-
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
@@ -36,7 +35,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.HistoryViewHolder>
                 TextView date = (TextView)v.findViewById(R.id.date_holder);
                 String name = date.getText().toString();
                 Intent mappedHistoryIntent = new Intent(v.getContext().getApplicationContext(), MapActivity.class);
-                mappedHistoryIntent.putExtra("list", new ProductivityDBHelper(v.getContext().getApplicationContext()).getDateLocations(name));
+                mappedHistoryIntent.putExtra("list", new ProductivityDBHelper(v.getContext()).getDateLocations(name));
                 mappedHistoryIntent.putExtra("title", name);
                 v.getContext().startActivity(mappedHistoryIntent);
             }
